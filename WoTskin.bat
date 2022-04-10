@@ -4,6 +4,7 @@ color 8f
 title World Of Tank Skin Sync
 set ServerAddress=mashiro37.i234.me
 rem curl -OL http://%ServerAddress%/WoTskin/walalaru.zip -o mods.zip
+for /f
 
 
 curl -OL# http://%ServerAddress%/WoTskin/Skinlist.inf
