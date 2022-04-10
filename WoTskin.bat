@@ -29,9 +29,7 @@ for /f "delims=\ usebackq" %%b in (ClientLocation.inf) do set DriveName=%%b
 cd /d %DriveName%
 cd %ClientLocation%/res_mods
 
-rem 국가 선택 한 다음에 가능한 번호 쫙 띄워서 보여주는쪽이 직관적일듯 
-rem 골때리는게 코드(A134)랑 스킨이름(A134_M24E2_SuperChaffee) 매칭이 짜증날듯
-rem 이거는 wotmod형식으로 묶어서 A134.wotmod 해놓고 안에 res/1.16.0/america/A134_M24E2_SuperChaffee 이런식으로 포장하는게 좋을거같은데
-rem 아니면 서버 저장공간에서 /A134/A134_M24E2_SuperChaffee 이런식으로 따로 묶어놔도 될거고
+:: 국가 선택 한 다음에 가능한 번호 쫙 띄워서 보여주는쪽이 직관적일듯 골때리는게 코드(A134)랑 스킨이름(A134_M24E2_SuperChaffee) 매칭이 짜증날듯 이거는 wotmod형식으로 묶어서 A134.wotmod 해놓고 안에 res/1.16.0/america/A134_M24E2_SuperChaffee 이런식으로 포장하는게 좋을거같은데 아니면 서버 저장공간에서 A134 폴더 이런식으로 따로 묶어놔도 될거고
+
 
 pause
