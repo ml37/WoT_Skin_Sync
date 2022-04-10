@@ -3,17 +3,23 @@ chcp 65001
 color 8f
 title World Of Tank Skin Sync
 set ServerAddress=mashiro37.i234.me
+rem curl -OL http://%ServerAddress%/WoTskin/walalaru.zip -o mods.zip
 
-for /f "delims=" %%a in (WoTskinList.inf) do set list=%%a
 
+curl -OL# http://%ServerAddress%/WoTskin/Skinlist.inf
+
+for /f "delims=" %%a in (Skinlist.inf) do set list=%%a
 for /f "delims=" %%b in (WoTskinLocation.inf) do set loc=%%b
-for /f "delims=" %%c in (_Aslains_Installer_Options.inf) do set aslain=%%c
 
 echo Skin list : %list%
 echo Gamefile Location : %loc%
-echo aslain : %aslain%
+cls
 
-rem curl -OL http://%ServerAddress%/WoTskin/walalaru.zip -o mods.zip
+for /f "tokens=*" %%s in (Skinlist.inf) do (
+  echo %%s
+)
+
+
 
 
 pause
