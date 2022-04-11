@@ -21,7 +21,6 @@ for /f "tokens=*" %%c in (Skinlist.inf) do (
     echo No.!ListNumber! - %%c
 )
 
-rem 번호 입력 코드 탱크 이름 예시) A134_M24E2_SuperChaffee, It12_Prototipo_Standard_B
 echo -----------------------------
 for /f "delims=_ usebackq" %%d in (Skinlist.inf) do (echo %%d) 
 echo -----------Select------------
@@ -49,9 +48,6 @@ mkdir %ClientLocation%\res_mods\%ClientVersion%\vehicles\poland
 mkdir %ClientLocation%\res_mods\%ClientVersion%\vehicles\russian
 mkdir %ClientLocation%\res_mods\%ClientVersion%\vehicles\sweden
 
-
-
-rem ClientLocation.inf에서 위치 가져오고 res_mods 폴더로 이동
 for /f "delims=\ usebackq" %%e in (ClientLocation.inf) do set DriveName=%%e
 cd /d %DriveName%
 cd %ClientLocation%\SkinTemp\file\

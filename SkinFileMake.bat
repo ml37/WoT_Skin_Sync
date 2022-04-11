@@ -1,11 +1,12 @@
 @echo on
 chcp 65001
+rd /s /q Input
+rd /s /q Output
 cls
 set StartPosition=%cd%
 mkdir Input
-mkdir Output
 pause
-
+mkdir Output
 cd Input
 dir /a:d /b > list.txt
 for /f  %%a in (list.txt) do set OriginalFileName=%%a
@@ -21,5 +22,9 @@ cd %cd%
 xcopy Input\ Output\%FileName%\vehicles\italy\ /e
 cd Output
 tar -cvzf %FileName%.zip %FileName%
-del It17
+rmdir /s /q %FileName%
+move %FileName%.zip %StartPosition%
+cd ..
+rd /s /q Input
+rd /s /q Output
 pause
