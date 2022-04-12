@@ -25,7 +25,7 @@ echo -----------------------------
 for /f "delims=_ usebackq" %%d in (Skinlist.inf) do (echo %%d) 
 echo -----------Select------------
 setlocal
-set /p "Ask= Walalaru : "
+set /p "Ask= Number [ex) It17] : "
 curl -OL# http://%ServerAddress%/WoTskin/Skin/%Ask%.zip
 mkdir %ClientLocation%\SkinTemp\file
 mkdir %ClientLocation%\SkinTemp\list
