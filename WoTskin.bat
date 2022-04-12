@@ -8,13 +8,8 @@ set ServerAddress=mashiro37.i234.me
 curl -OL# http://%ServerAddress%/WoTskin/Skinlist.inf
 curl -OL# http://%ServerAddress%/WoTskin/Version.inf 
 for /f "delims=" %%b in (Version.inf) do set ClientVersion=%%b
+
 :Sync
-
-curl -OL# http://%ServerAddress%/WoTskin/Skinlist.inf
-curl -OL# http://%ServerAddress%/WoTskin/Version.inf 
-for /f "delims=" %%b in (Version.inf) do set ClientVersion=%%b
-
-
 cls
 
 title "World Of Tank Skin Sync %ClientLocation% | %ClientVersion%"
