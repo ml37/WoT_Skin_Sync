@@ -4,12 +4,13 @@ color 8f
 
 set ListNumber = 1
 set ServerAddress=mashiro37.i234.me
-
+:Sync
 curl -OL# http://%ServerAddress%/WoTskin/Skinlist.inf
 curl -OL# http://%ServerAddress%/WoTskin/Version.inf 
 
 for /f "delims=" %%a in (ClientLocation.inf) do set ClientLocation=%%a
 for /f "delims=" %%b in (Version.inf) do set ClientVersion=%%b
+
 
 cls
 
@@ -20,7 +21,7 @@ for /f "tokens=*" %%c in (Skinlist.inf) do (
     set /a ListNumber = !ListNumber! + 1
     echo No.!ListNumber! - %%c
 )
-
+set ListNumber = 1
 echo -----------------------------
 for /f "delims=_ usebackq" %%d in (Skinlist.inf) do (echo %%d) 
 echo -----------Select------------
@@ -54,5 +55,5 @@ cd %ClientLocation%\SkinTemp\file\
 
 xcopy %Ask% %ClientLocation%\res_mods\%ClientVersion%\ /e
 
-
+goto Sync
 pause
