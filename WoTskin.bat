@@ -66,15 +66,15 @@ pause
 cls
 echo WIP
 for %%z in (%ClientLocation%\SkinTemp\list\*.skin) do (
-    set loadbackuped = %%~nz
+    set loadbackuped=%%~nz
     echo %%~nz
-    
-    curl -OL# http://%ServerAddress%/WoTskin/Skin/%loadbackuped%.zip
+    echo !loadbackuped!
+    curl -OL# http://%ServerAddress%/WoTskin/Skin/!loadbackuped!.zip
     mkdir %ClientLocation%\SkinTemp\file
     mkdir %ClientLocation%\SkinTemp\list
     mkdir %ClientLocation%\SkinTemp\Zip
-    tar.exe -xf %loadbackuped%.zip -C %ClientLocation%\SkinTemp\file
-    move %loadbackuped%.zip %ClientLocation%\SkinTemp\Zip
+    tar.exe -xf !loadbackuped!.zip -C %ClientLocation%\SkinTemp\file
+    move !loadbackuped!.zip %ClientLocation%\SkinTemp\Zip
 
     mkdir %ClientLocation%\res_mods\%ClientVersion%
     mkdir %ClientLocation%\res_mods\%ClientVersion%\vehicles
@@ -93,7 +93,7 @@ for %%z in (%ClientLocation%\SkinTemp\list\*.skin) do (
     cd /d %DriveName%
     cd %ClientLocation%\SkinTemp\file\
 
-    xcopy %loadbackuped% %ClientLocation%\res_mods\%ClientVersion%\ /e
+    xcopy !loadbackuped! %ClientLocation%\res_mods\%ClientVersion%\ /e
 )
 pause
 goto Sync
