@@ -5,6 +5,7 @@ rd /s /q Output
 cls
 set StartPosition=%cd%
 mkdir Input
+explorer Input
 pause
 mkdir Output
 cd Input
