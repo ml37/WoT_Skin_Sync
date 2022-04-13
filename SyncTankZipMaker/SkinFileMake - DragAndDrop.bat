@@ -10,7 +10,6 @@ cd DInput
 xcopy %~1%
 echo.>wa.txt %dragfilename%
 for /f "delims=_ usebackq" %%a in (wa.txt) do set FileName=%%a
-echo %FileName%
 del wa.txt
 cd ..
     echo.> %FileName%.wow %FileName%
@@ -71,7 +70,6 @@ cd ..
     )
 :Install
 mkdir %FileName%\vehicles\%country%\%dragfilename%
-echo %country%
 xcopy DInput\*.dds %FileName%\vehicles\%country%\%dragfilename% /e
 cd DOutput
 tar -cvzf %FileName%.zip %FileName%
