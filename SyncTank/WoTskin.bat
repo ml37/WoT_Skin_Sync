@@ -1,12 +1,15 @@
-@echo on
+@echo off
 chcp 65001
 color 8f
+if not exist ClientLocation.inf (
+    echo.> ClientLocation.inf
+)
 for /f "delims=" %%a in (ClientLocation.inf) do set ClientLocation=%%a
 for /f "delims=\ usebackq" %%e in (ClientLocation.inf) do set DriveName=%%e
 set ListNumber = 1
 set ServerAddress=mashiro37.i234.me
 curl -OL# http://%ServerAddress%/WoTskin/Skinlist.inf
-curl -OL# http://%ServerAddress%/WoTskin/Version.inf 
+curl -OL# http://%ServerAddress%/WoTskin/Version.inf
 for /f "delims=" %%b in (Version.inf) do set ClientVersion=%%b
 
 :Sync
