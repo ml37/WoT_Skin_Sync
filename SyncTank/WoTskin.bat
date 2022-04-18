@@ -137,7 +137,7 @@ echo.> %FileName%.wow %FileName%
         goto :Downloadandinstall
     )
     if  %wa%==J (
-        set country=J
+        set country=Japan
         goto :Downloadandinstall
     )
     if  %wa%==Pl (

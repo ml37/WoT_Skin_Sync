@@ -53,7 +53,7 @@ cd ..
         goto :Install
     )
     if  %wa%==J (
-        set country=J
+        set country=japan
         goto :Install
     )
     if  %wa%==Pl (
