@@ -2,7 +2,7 @@
 chcp 65001
 title SyncTank
 setlocal enabledelayedexpansion
-set offlinestatus=
+set offlinestatus= 
 set ListNumber = 1
 set ServerAddress=mashiro37.i234.me
 
