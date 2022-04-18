@@ -153,16 +153,17 @@ echo.> %FileName%.wow %FileName%
         goto :Downloadandinstall
     )
     goto install
+
 :Downloadandinstall
 cls
 echo %country%
 if %Ask%==walalaru (goto loadbackup) else (
 curl -OL# http://%ServerAddress%/WoTskin/Skin/%Ask%.zip
-mkdir %ClientLocation%\SkinTemp\file
+mkdir %ClientLocation%\SkinTemp\Temp
 mkdir %ClientLocation%\SkinTemp\list
 echo.> %ClientLocation%\SkinTemp\list\%Ask%.skin %Ask% \ %time%
 mkdir %ClientLocation%\SkinTemp\Zip
-tar.exe -xf %Ask%.zip -C %ClientLocation%\SkinTemp\file
+tar.exe -xf %Ask%.zip -C %ClientLocation%\SkinTemp\Temp
 move %Ask%.zip %ClientLocation%\SkinTemp\Zip
 mkdir %ClientLocation%\res_mods\%ClientVersion%\vehicles\american
 mkdir %ClientLocation%\res_mods\%ClientVersion%\vehicles\british
@@ -178,8 +179,9 @@ mkdir %ClientLocation%\res_mods\%ClientVersion%\vehicles\sweden
 
 for /f "delims=\ usebackq" %%e in (ClientLocation.inf) do set DriveName=%%e
 cd /d %DriveName%
-cd %ClientLocation%\SkinTemp\file\
+cd %ClientLocation%\SkinTemp\Temp\
 xcopy %Ask% %ClientLocation%\res_mods\%ClientVersion%\ /e
+rmdir %Ask% /s /q
 goto Install
 )
 
@@ -191,10 +193,10 @@ for %%z in (%ClientLocation%\SkinTemp\list\*.skin) do (
     echo %%~nz
     echo !loadbackuped!
     curl -OL# http://%ServerAddress%/WoTskin/Skin/!loadbackuped!.zip
-    mkdir %ClientLocation%\SkinTemp\file
+    mkdir %ClientLocation%\SkinTemp\Temp
     mkdir %ClientLocation%\SkinTemp\list
     mkdir %ClientLocation%\SkinTemp\Zip
-    tar.exe -xf !loadbackuped!.zip -C %ClientLocation%\SkinTemp\file
+    tar.exe -xf !loadbackuped!.zip -C %ClientLocation%\SkinTemp\Temp
     move !loadbackuped!.zip %ClientLocation%\SkinTemp\Zip
 
     mkdir %ClientLocation%\res_mods\%ClientVersion%\vehicles\american
@@ -210,8 +212,9 @@ for %%z in (%ClientLocation%\SkinTemp\list\*.skin) do (
     mkdir %ClientLocation%\res_mods\%ClientVersion%\vehicles\sweden
 
     cd /d %DriveName%
-    cd %ClientLocation%\SkinTemp\file\
-
+    cd %ClientLocation%\SkinTemp\Temp\
+    
     xcopy !loadbackuped! %ClientLocation%\res_mods\%ClientVersion%\ /e
+    rmdir !loadbackuped! /s /q
 )
 goto Install
