@@ -68,14 +68,18 @@ if not exist Version.inf (
 )
 
 for /f "delims=" %%b in (Version.inf) do set ClientVersion=%%b
+set StartInstall=%cd%
+
 
 :Install
+cd %StartInstall%
 cls
 title "SyncTank | Client on %ClientLocation% | WoT Client %ClientVersion% %offlinestatus%"
 echo ----------------select------------------
 echo .
 echo .
 setlocal enabledelayedexpansion
+
 for /f "tokens=*" %%c in (Skinlist.inf) do (
     set /a ListNumber = !ListNumber! + 1
     echo No.!ListNumber! - %%c
@@ -89,6 +93,69 @@ echo .
 setlocal
 echo Example : It17
 set /p "Ask= Type Vehicle Number Code, If you want to load backup, Type [walalaru] : "
+echo.>wa.wa %Ask%
+for /f "delims=_ usebackq" %%k in (wa.wa) do set FileName=%%k
+del wa.wa
+echo.> %FileName%.wow %FileName%
+    for /f "delims=1 usebackq" %%d in (%FileName%.wow) do (echo.> %FileName%.wow %%d)
+    for /f "delims=2 usebackq" %%d in (%FileName%.wow) do (echo.> %FileName%.wow %%d)
+    for /f "delims=3 usebackq" %%d in (%FileName%.wow) do (echo.> %FileName%.wow %%d)
+    for /f "delims=4 usebackq" %%d in (%FileName%.wow) do (echo.> %FileName%.wow %%d)
+    for /f "delims=5 usebackq" %%d in (%FileName%.wow) do (echo.> %FileName%.wow %%d)
+    for /f "delims=6 usebackq" %%d in (%FileName%.wow) do (echo.> %FileName%.wow %%d)
+    for /f "delims=7 usebackq" %%d in (%FileName%.wow) do (echo.> %FileName%.wow %%d)
+    for /f "delims=8 usebackq" %%d in (%FileName%.wow) do (echo.> %FileName%.wow %%d)
+    for /f "delims=9 usebackq" %%d in (%FileName%.wow) do (echo.> %FileName%.wow %%d)
+    for /f "delims=0 usebackq" %%d in (%FileName%.wow) do (set wa=%%d)
+    del %FileName%.wow
+    if  %wa%==A (
+        set country=american
+        goto :Downloadandinstall
+    )
+    if  %wa%==GB (
+        set country=british
+        goto :Downloadandinstall
+    )
+    if  %wa%==Ch (
+        set country=chinese
+        goto :Downloadandinstall
+    )
+    if  %wa%==Cz (
+        set country=czech
+        goto :Downloadandinstall
+    )
+    if  %wa%==F (
+        set country=french
+        goto :Downloadandinstall
+    )
+    if  %wa%==G (
+        set country=german
+        goto :Downloadandinstall
+    )
+    if  %wa%==It (
+        set country=italy
+        goto :Downloadandinstall
+    )
+    if  %wa%==J (
+        set country=J
+        goto :Downloadandinstall
+    )
+    if  %wa%==Pl (
+        set country=poland
+        goto :Downloadandinstall
+    )
+    if  %wa%==R (
+        set country=russian
+        goto :Downloadandinstall
+    )
+    if  %wa%==S (
+        set country=sweden
+        goto :Downloadandinstall
+    )
+    goto install
+:Downloadandinstall
+cls
+echo %country%
 if %Ask%==walalaru (goto loadbackup) else (
 curl -OL# http://%ServerAddress%/WoTskin/Skin/%Ask%.zip
 mkdir %ClientLocation%\SkinTemp\file
