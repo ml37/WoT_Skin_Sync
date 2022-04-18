@@ -41,7 +41,7 @@ if not exist Skinlist.inf (
     echo .
     echo .
     echo "error 2 : Skinlist.inf Not Exist"
-    echo Can`t Download Skin list!
+    echo Can`t Download Skin list from %ServerAddress%!
     echo .
     echo .
     echo ----------------------------------
@@ -56,7 +56,7 @@ if not exist Version.inf (
     echo .
     echo .
     echo "error 3 : Version.inf Not Exist"
-    echo Can`t Download Client Version! Check Internet Connection!
+    echo Can`t Download Client Version from %ServerAddress%!
     echo .
     echo .
     echo ----------------------------------
@@ -72,6 +72,7 @@ set StartInstall=%cd%
 
 
 :Install
+color 70
 cd %StartInstall%
 cls
 title "SyncTank | Client on %ClientLocation% | WoT Client %ClientVersion% %offlinestatus%"
@@ -93,6 +94,17 @@ echo .
 setlocal
 echo Example : It17
 set /p "Ask= Type Vehicle Number Code, If you want to load backup, Type [walalaru] : "
+if %Ask%==www (
+    cls
+    title 코이츠 wwwww 이런거 시도하는 wwww
+    
+    for /l %%j in (0,1,100) DO (
+        echo 코이츠 wwwww 이런거 시도하는 wwww
+    )
+    )
+    goto Install
+    )
+    pause
 echo.>wa.wa %Ask%
 for /f "delims=_ usebackq" %%k in (wa.wa) do set FileName=%%k
 del wa.wa
@@ -157,13 +169,15 @@ echo.> %FileName%.wow %FileName%
 :Downloadandinstall
 cls
 echo %country%
-if %Ask%==walalaru (goto loadbackup) else (
+if %Ask%==walalaru (
+    goto loadbackup 
+    ) else (
 curl -OL# http://%ServerAddress%/WoTskin/Skin/%Ask%.zip
-mkdir %ClientLocation%\SkinTemp\Temp
+mkdir %ClientLocation%\SkinTemp\.Temp
 mkdir %ClientLocation%\SkinTemp\list
 echo.> %ClientLocation%\SkinTemp\list\%Ask%.skin %Ask% \ %time%
 mkdir %ClientLocation%\SkinTemp\Zip
-tar.exe -xf %Ask%.zip -C %ClientLocation%\SkinTemp\Temp
+tar.exe -xf %Ask%.zip -C %ClientLocation%\SkinTemp\.Temp
 move %Ask%.zip %ClientLocation%\SkinTemp\Zip
 mkdir %ClientLocation%\res_mods\%ClientVersion%\vehicles\american
 mkdir %ClientLocation%\res_mods\%ClientVersion%\vehicles\british
@@ -179,7 +193,7 @@ mkdir %ClientLocation%\res_mods\%ClientVersion%\vehicles\sweden
 
 for /f "delims=\ usebackq" %%e in (ClientLocation.inf) do set DriveName=%%e
 cd /d %DriveName%
-cd %ClientLocation%\SkinTemp\Temp\
+cd %ClientLocation%\SkinTemp\.Temp\
 xcopy %Ask% %ClientLocation%\res_mods\%ClientVersion%\ /e
 rmdir %Ask% /s /q
 goto Install
@@ -193,10 +207,10 @@ for %%z in (%ClientLocation%\SkinTemp\list\*.skin) do (
     echo %%~nz
     echo !loadbackuped!
     curl -OL# http://%ServerAddress%/WoTskin/Skin/!loadbackuped!.zip
-    mkdir %ClientLocation%\SkinTemp\Temp
+    mkdir %ClientLocation%\SkinTemp\.Temp
     mkdir %ClientLocation%\SkinTemp\list
     mkdir %ClientLocation%\SkinTemp\Zip
-    tar.exe -xf !loadbackuped!.zip -C %ClientLocation%\SkinTemp\Temp
+    tar.exe -xf !loadbackuped!.zip -C %ClientLocation%\SkinTemp\.Temp
     move !loadbackuped!.zip %ClientLocation%\SkinTemp\Zip
 
     mkdir %ClientLocation%\res_mods\%ClientVersion%\vehicles\american
@@ -212,7 +226,7 @@ for %%z in (%ClientLocation%\SkinTemp\list\*.skin) do (
     mkdir %ClientLocation%\res_mods\%ClientVersion%\vehicles\sweden
 
     cd /d %DriveName%
-    cd %ClientLocation%\SkinTemp\Temp\
+    cd %ClientLocation%\SkinTemp\.Temp\
     
     xcopy !loadbackuped! %ClientLocation%\res_mods\%ClientVersion%\ /e
     rmdir !loadbackuped! /s /q
