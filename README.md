@@ -38,7 +38,9 @@ ClientLocation.inf\ Set Your Client Location ex)E:\game\World_of_Tanks_ASIA
 
 Skinlist.inf is literally List of server skin file on {main}\WoTskin\Skin\ 
 
-ex)GB81_FV4004
+ex)
+
+GB81_FV4004
 G73_E50_Ausf_M
 G89_Leopard1
 G97_Waffentrager_IV
@@ -47,3 +49,6 @@ It17_Progetto_CC55_mod_54
 
 
 Version.inf is WoT client res_mods version ex)1.16.1.0
+
+1. 잘못된 입력시 (예 : fuck) rollback
+2. 파일 네이티브 인스톨
