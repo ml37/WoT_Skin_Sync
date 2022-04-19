@@ -101,10 +101,15 @@ if %Ask%==www (
     for /l %%j in (0,1,100) DO (
         echo 코이츠 wwwww 이런거 시도하는 wwww
     )
-    )
-    goto Install
-    )
     pause
+    goto Install
+) else if %Ask%==walalaru (
+    goto loadbackup 
+    ) else if %Ask%==walalalaru (
+        goto localloadbackup
+    )
+    
+    
 echo.>wa.wa %Ask%
 for /f "delims=_ usebackq" %%k in (wa.wa) do set FileName=%%k
 del wa.wa
@@ -169,9 +174,6 @@ echo.> %FileName%.wow %FileName%
 :Downloadandinstall
 cls
 echo %country%
-if %Ask%==walalaru (
-    goto loadbackup 
-    ) else (
 curl -OL# http://%ServerAddress%/WoTskin/Skin/%Ask%.zip
 mkdir %ClientLocation%\SkinTemp\.Temp
 mkdir %ClientLocation%\SkinTemp\list
@@ -201,7 +203,6 @@ goto Install
 
 :loadbackup
 cls
-echo WIP
 for %%z in (%ClientLocation%\SkinTemp\list\*.skin) do (
     set loadbackuped=%%~nz
     echo %%~nz
@@ -232,3 +233,33 @@ for %%z in (%ClientLocation%\SkinTemp\list\*.skin) do (
     rmdir !loadbackuped! /s /q
 )
 goto Install
+
+:localloadbackup
+cls
+echo really WIP not worked yet
+for %%z in (%ClientLocation%\SkinTemp\list\*.skin) do (
+    set localloadbackuped=%%~nz
+    echo %%~nz
+    echo !localloadbackuped!
+    if not exist  %ClientLocation%\SkinTemp\Zip\!localloadbackuped!.zip (
+        echo File not exist in Temp folder!
+        goto start
+    )
+        tar.exe -xf %ClientLocation%\SkinTemp\zip\!localloadbackuped!.zip -C %ClientLocation%\SkinTemp\.Temp
+
+        mkdir %ClientLocation%\res_mods\%ClientVersion%\vehicles\american
+        mkdir %ClientLocation%\res_mods\%ClientVersion%\vehicles\british
+        mkdir %ClientLocation%\res_mods\%ClientVersion%\vehicles\chinese
+        mkdir %ClientLocation%\res_mods\%ClientVersion%\vehicles\czech
+        mkdir %ClientLocation%\res_mods\%ClientVersion%\vehicles\french
+        mkdir %ClientLocation%\res_mods\%ClientVersion%\vehicles\german
+        mkdir %ClientLocation%\res_mods\%ClientVersion%\vehicles\japan
+        mkdir %ClientLocation%\res_mods\%ClientVersion%\vehicles\italy
+        mkdir %ClientLocation%\res_mods\%ClientVersion%\vehicles\poland
+        mkdir %ClientLocation%\res_mods\%ClientVersion%\vehicles\russian
+        mkdir %ClientLocation%\res_mods\%ClientVersion%\vehicles\sweden
+    cd %ClientLocation%\SkinTemp\.Temp\
+        xcopy %localloadbackup%\vehicles\ \%ClientLocation%\res_mods\%ClientVersion%\ /e
+)
+pause
+    
