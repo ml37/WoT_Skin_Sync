@@ -1,4 +1,4 @@
-@echo on
+@echo off
 chcp 65001
 title SyncTank
 setlocal enabledelayedexpansion
