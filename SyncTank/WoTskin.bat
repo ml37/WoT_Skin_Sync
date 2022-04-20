@@ -9,10 +9,10 @@ set ServerAddress=mashiro37.i234.me
 :start
 color 70
 if not exist ClientLocation.inf (
-    echo.> ClientLocation.inf "Text Your Client Location here (ex : D:\Games\World_of_Tanks_ASIA)"
+    echo.> ClientLocation.inf "Text_Your_Client_Location_here_(ex:D:\Games\World_of_Tanks_ASIA)"
 )
 for /f "usebackq" %%a in (ClientLocation.inf) do set ClientLocation=%%a
-if %ClientLocation%=="Text Your Client Location here (ex : D:\Games\World_of_Tanks_ASIA)" (
+if %ClientLocation%=="Text_Your_Client_Location_here_(ex:D:\Games\World_of_Tanks_ASIA)" (
     ::Error1, When SyncTank found ClientLocation.inf is Automatic made by SyncTank
     color 40
     cls
