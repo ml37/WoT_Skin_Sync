@@ -51,4 +51,4 @@ It17_Progetto_CC55_mod_54
 Version.inf is WoT client res_mods version ex)1.16.1.0
 
 1. 잘못된 입력시 (예 : fuck) rollback - Half sucess(When u type Country code(ex : F,It), rollback is not work)
-2. 파일 네이티브 인스톨
+2. 파일 네이티브 인스톨 -> 평소 인스톨 절차 순서 변경을 통해 그냥 설치하게 놔둠
