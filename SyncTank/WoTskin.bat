@@ -5,6 +5,7 @@ setlocal enabledelayedexpansion
 set offlinestatus= 
 set ListNumber = 1
 set ServerAddress=mashiro37.i234.me
+set StartInstall=%cd%
 
 :start
 color 70
@@ -12,6 +13,9 @@ if not exist ClientLocation.inf (
     echo.> ClientLocation.inf "Text_Your_Client_Location_here_(ex:D:\Games\World_of_Tanks_ASIA)"
 )
 for /f "usebackq" %%a in (ClientLocation.inf) do set ClientLocation=%%a
+echo.> CDClientLocation.wow %cd%
+for /f "delims=\ usebackq" %%a in (CDClientLocation.wow) do set CDClientLocation=%%a
+del CDClientLocation.wow
 if %ClientLocation%=="Text_Your_Client_Location_here_(ex:D:\Games\World_of_Tanks_ASIA)" (
     ::Error1, When SyncTank found ClientLocation.inf is Automatic made by SyncTank
     color 40
@@ -69,24 +73,26 @@ if not exist Version.inf (
 )
 
 for /f "delims=" %%c in (Version.inf) do set ClientVersion=%%c
-set StartInstall=%cd%
+
 
 
 :Install
 color 70
-cd %StartInstall%
 cls
-title "SyncTank | Client on %ClientLocation% | WoT Client %ClientVersion% %offlinestatus%"
+title "SyncTank | Client on %ClientLocation% | WoT Client %ClientVersion% %offlinestatus% | Start position %StartInstall% "
 echo ----------------select------------------
 echo .
 echo .
 setlocal enabledelayedexpansion
 
-for /f "tokens=*" %%d in (Skinlist.inf) do (
+cd /d %CDClientLocation%
+cd %StartInstall%
+for /f "tokens=*" %%y in (Skinlist.inf) do (
     set /a ListNumber = !ListNumber! + 1
-    echo No.!ListNumber! - %%d
+    echo No.!ListNumber! - %%y
 )
-set ListNumber = 1
+set /a ListNumber = 0
+
 echo .
 echo .
 echo ----------------------------------------
@@ -171,7 +177,7 @@ echo.> %FileName%.wow %FileName%
         goto :Downloadandinstall
     )
     echo Not invalied form! Type right Vehicle Number Code
-    goto install
+    goto start
 
 :Downloadandinstall
 ::Install process
