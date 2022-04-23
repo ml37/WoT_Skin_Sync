@@ -99,7 +99,7 @@ echo ----------------------------------------
 echo .
 echo .
 setlocal
-echo Example : It17
+echo Example : It17, GB81
 set /p "Ask= Type Vehicle Number Code, If you want to load backup, Type [walalaru] : "
 if %Ask%==www (
     cls
@@ -109,7 +109,7 @@ if %Ask%==www (
         echo 코이츠 wwwww 이런거 시도하는 wwww
     )
     pause
-    goto Install
+    goto start
 ) else if %Ask%==walalaru (
     goto loadbackup 
     ) else if %Ask%==walalalaru (
