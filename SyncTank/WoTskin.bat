@@ -99,8 +99,21 @@ echo ----------------------------------------
 echo .
 echo .
 setlocal
+echo loc : Open client location with windows explorer
+echo resmod : Open client res_mods location with windows explorer
+echo walalaru : Download(Or load) File that you`ve been installed(Load Backup)
 echo Example : It17, GB81
 set /p "Ask= Type Vehicle Number Code, If you want to load backup, Type [walalaru] : "
+if %Ask%==loc (
+    cls
+    explorer %ClientLocation%
+    goto start
+)
+if %Ask%==resmod (
+    cls
+    explorer %ClientLocation%\res_mods
+    goto start
+)
 if %Ask%==www (
     cls
     title 코이츠 wwwww 이런거 시도하는 wwww
