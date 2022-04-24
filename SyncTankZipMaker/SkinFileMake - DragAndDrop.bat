@@ -74,7 +74,6 @@ mkdir %FileName%\vehicles\%country%\%dragfilename%\PSD
 xcopy DInput\*.dds %FileName%\vehicles\%country%\%dragfilename% /e
 xcopy DInput\*.psd %FileName%\vehicles\%country%\%dragfilename%\PSD /e
 cd DOutput
-echo.>Installed_by_SyncTank.walalaru walalaru
 tar -cvzf %FileName%.zip %FileName%
 rmdir /s /q %FileName%
 move %FileName%.zip %StartPosition%
