@@ -1,4 +1,4 @@
-@echo on
+@echo off
 chcp 65001
 set StartPosition=%cd%
 rd /s /q DInput
@@ -9,7 +9,7 @@ mkdir DInput
 cd DInput
 xcopy %~1%
 echo.>wa.txt %dragfilename%
-for /f "delims=_ usebackq" %%a in (wa.txt) do set FileName=%%a
+for /f "tokens=1 delims=_ usebackq" %%a in (wa.txt) do set FileName=%%a
 del wa.txt
 cd ..
     echo.> %FileName%.wow %FileName%
