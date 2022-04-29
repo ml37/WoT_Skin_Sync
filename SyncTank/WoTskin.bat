@@ -123,6 +123,11 @@ if %Ask%==www (
     )
     pause
     goto start
+)
+if %Ask%==mkdir (
+    cls
+    
+    goto mkresdir
 ) else if %Ask%==walalaru (
     goto loadbackup 
     ) else if %Ask%==walalalaru (
@@ -256,3 +261,13 @@ for %%z in (%ClientLocation%\SkinTemp\list\*.skin) do (
     rmdir !loadbackuped! /s /q
 )
 goto Install
+
+:mkresdir
+cls
+::Make directory for res_mods from res\package files(tree structure copy without contents)
+::tar -tf %ClientLocation%\res\packages\vehicles_level_01.pkg
+FOR /F "tokens=* USEBACKQ" %%F IN (`tar -tf %ClientLocation%\res\packages\vehicles_level_01.pkg`) DO (
+SET var=%%F
+ECHO.>!var!.txt
+)
+pause

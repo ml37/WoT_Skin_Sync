@@ -1,0 +1,1 @@
+ $(tar -tf E:\game\wotasia\World_of_Tanks_ASIA\res\packages\vehicles_level_01.pkg)
