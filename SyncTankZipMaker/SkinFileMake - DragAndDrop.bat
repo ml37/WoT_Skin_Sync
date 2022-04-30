@@ -5,6 +5,10 @@ rd /s /q DInput
 rd /s /q DOutput
 set dragfiledirectory=%~1%
 set dragfilename=%~n1%
+echo.> walalaru.txt %~n1%
+notepad walalaru.txt
+del walalaru.txt
+notepad W:\WoTskin\Skinlist.inf
 mkdir DInput
 cd DInput
 xcopy %~1%
