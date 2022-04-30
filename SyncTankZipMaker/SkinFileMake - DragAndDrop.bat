@@ -5,6 +5,7 @@ rd /s /q DInput
 rd /s /q DOutput
 set dragfiledirectory=%~1%
 set dragfilename=%~n1%
+::C:\에 폴더 만들어서 inf 저장하기
 echo.> walalaru.txt %~n1%
 notepad walalaru.txt
 del walalaru.txt
