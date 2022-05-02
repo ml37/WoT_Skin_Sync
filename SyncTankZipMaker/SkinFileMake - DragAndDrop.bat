@@ -1,15 +1,30 @@
 @echo off
+
 chcp 65001
 set StartPosition=%cd%
-rd /s /q DInput
-rd /s /q DOutput
 set dragfiledirectory=%~1%
 set dragfilename=%~n1%
+
+cd /d c:
+mkdir SyncTank
+set InfLocation=%cd%
+cd /d %StartPosition%
+
 ::C:\에 폴더 만들어서 inf 저장하기
+mkdir %InfLocation%SyncTank\Zipmaker
+cd /d %InfLocation%SyncTank\Zipmaker
+if not exist ServerLocation.inf (
+    echo.>ServerLocation.inf W:\WoTskin
+    notepad ServerLocation.inf
+)
+for /f "usebackq" %%a in (ServerLocation.inf) do set ServerLocation=%%a
+
+::
+cd /d %StartPosition%
 echo.> walalaru.txt %~n1%
 notepad walalaru.txt
 del walalaru.txt
-notepad W:\WoTskin\Skinlist.inf
+notepad %ServerLocation%\Skinlist.inf
 mkdir DInput
 cd DInput
 xcopy %~1%
@@ -85,3 +100,6 @@ move %FileName%.zip %StartPosition%
 cd %StartPosition%
 rd /s /q DInput
 rd /s /q DOutput
+copy %FileName%.zip %ServerLocation%\Skin
+explorer %ServerLocation%\Skin
+pause
