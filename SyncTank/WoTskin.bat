@@ -22,12 +22,12 @@ if %ClientLocation%=="Text_Your_Client_Location_here_(ex:D:\Games\World_of_Tanks
     cls
     title "Error 1 : ClientLocation.inf has Include Error message"
     echo ----------------------------------
-    echo .
-    echo .
+    echo.
+    echo.
     echo "Error 1 : ClientLocation.inf has Include Error message"
     echo "Client Location Not Found! Please Write Your Client location on ClientLocation.inf!"
-    echo .
-    echo .
+    echo.
+    echo.
     echo ----------------------------------
     notepad ClientLocation.inf
     goto start
@@ -43,12 +43,12 @@ if not exist Skinlist.inf (
     cls
     title "error 2 : Skinlist.inf Not Exist"
     echo ----------------------------------
-    echo .
-    echo .
+    echo.
+    echo.
     echo "error 2 : Skinlist.inf Not Exist"
     echo "Can`t Download Skin list from %ServerAddress%"
-    echo .
-    echo .
+    echo.
+    echo.
     echo ----------------------------------
     echo.> Skinlist.inf "Can`t Download Skin list!"
     goto start
@@ -58,12 +58,12 @@ if not exist Version.inf (
     cls
     title "error 3 : Version.inf Not Exist"
     echo ----------------------------------
-    echo .
-    echo .
+    echo.
+    echo.
     echo "error 3 : Version.inf Not Exist"
     echo "Can`t Download Client Version from %ServerAddress%"
-    echo .
-    echo .
+    echo.
+    echo.
     echo ----------------------------------
 
     set /p "cvml=Type Client res_mods Version (ex : 1.16.1.0): "
@@ -81,9 +81,8 @@ color 70
 cls
 title "SyncTank | Client on %ClientLocation% | WoT Client %ClientVersion% %offlinestatus% | Start position %StartInstall% "
 echo ----------------select------------------
-echo .
-echo .
-setlocal enabledelayedexpansion
+echo.
+echo.
 
 cd /d %CDClientLocation%
 cd %StartInstall%
@@ -93,15 +92,16 @@ for /f "tokens=*" %%y in (Skinlist.inf) do (
 )
 set /a ListNumber = 0
 
-echo .
-echo .
+echo.
+echo.
 echo ----------------------------------------
-echo .
-echo .
-setlocal
+echo.
+echo.
 echo loc : Open client location with windows explorer
 echo resmod : Open client res_mods location with windows explorer
 echo walalaru : Download(Or load) File that you`ve been installed(Load Backup)
+echo all : Download all of uploaded files (WIP)
+echo mkdir : Make Aseet PKG list and Make empty folder in res_mods
 echo Example : It17, GB81
 set /p "Ask= Type Vehicle Number Code, If you want to load backup, Type [walalaru] : "
 if %Ask%==loc (
@@ -271,3 +271,4 @@ SET var=%%F
 ECHO.>!var!.txt
 )
 pause
+goto install
