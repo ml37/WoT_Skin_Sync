@@ -109,6 +109,11 @@ if %Ask%==loc (
     explorer %ClientLocation%
     goto start
 )
+if %Ask%==AIO (
+    cls
+    goto AIOdownload
+
+)
 if %Ask%==resmod (
     cls
     explorer %ClientLocation%\res_mods
@@ -272,3 +277,33 @@ ECHO.>!var!.txt
 )
 pause
 goto install
+
+:AIOdownload
+cls
+echo AIO
+curl -OL# http://%ServerAddress%/WoTskin/Skin/AIO.zip
+mkdir %ClientLocation%\SkinTemp\Temp
+mkdir %ClientLocation%\SkinTemp\list
+echo.> %ClientLocation%\SkinTemp\list\AIO.skin AIO \ %time%
+mkdir %ClientLocation%\SkinTemp\Zip
+tar.exe -xf AIO.zip -C %ClientLocation%\SkinTemp\Temp
+move AIO.zip %ClientLocation%\SkinTemp\Zip
+mkdir %ClientLocation%\res_mods\%ClientVersion%\vehicles\american
+mkdir %ClientLocation%\res_mods\%ClientVersion%\vehicles\british
+mkdir %ClientLocation%\res_mods\%ClientVersion%\vehicles\chinese
+mkdir %ClientLocation%\res_mods\%ClientVersion%\vehicles\czech
+mkdir %ClientLocation%\res_mods\%ClientVersion%\vehicles\french
+mkdir %ClientLocation%\res_mods\%ClientVersion%\vehicles\german
+mkdir %ClientLocation%\res_mods\%ClientVersion%\vehicles\japan
+mkdir %ClientLocation%\res_mods\%ClientVersion%\vehicles\italy
+mkdir %ClientLocation%\res_mods\%ClientVersion%\vehicles\poland
+mkdir %ClientLocation%\res_mods\%ClientVersion%\vehicles\russian
+mkdir %ClientLocation%\res_mods\%ClientVersion%\vehicles\sweden
+
+for /f "delims=\ usebackq" %%e in (ClientLocation.inf) do set DriveName=%%e
+cd /d %DriveName%
+cd %ClientLocation%\SkinTemp\Temp\
+
+xcopy AIO %ClientLocation%\res_mods\%ClientVersion%\ /e
+
+rmdir AIO /s /q
