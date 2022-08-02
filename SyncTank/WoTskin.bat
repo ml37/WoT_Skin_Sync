@@ -6,7 +6,8 @@ set offlinestatus=
 set ListNumber = 1
 set ServerAddress=mashiro37.i234.me
 set StartInstall=%cd%
-
+curl -OL# http://%ServerAddress%/WoTskin/7zr.exe
+move 7zr.exe %StartInstall%
 :start
 color 70
 if not exist ClientLocation.inf (
@@ -85,7 +86,7 @@ echo.
 echo.
 
 cd /d %CDClientLocation%
-cd %StartInstall%
+cd /d %StartInstall%
 for /f "tokens=*" %%y in (Skinlist.inf) do (
     set /a ListNumber = !ListNumber! + 1
     echo No.!ListNumber! - %%y
@@ -281,13 +282,10 @@ goto install
 :AIOdownload
 cls
 echo AIO
-curl -OL# http://%ServerAddress%/WoTskin/Skin/AIO.zip
+curl -OL# http://%ServerAddress%/WoTskin/AIO/AIO.7z
 mkdir %ClientLocation%\SkinTemp\Temp
 mkdir %ClientLocation%\SkinTemp\list
-echo.> %ClientLocation%\SkinTemp\list\AIO.skin AIO \ %time%
 mkdir %ClientLocation%\SkinTemp\Zip
-tar.exe -xf AIO.zip -C %ClientLocation%\SkinTemp\Temp
-move AIO.zip %ClientLocation%\SkinTemp\Zip
 mkdir %ClientLocation%\res_mods\%ClientVersion%\vehicles\american
 mkdir %ClientLocation%\res_mods\%ClientVersion%\vehicles\british
 mkdir %ClientLocation%\res_mods\%ClientVersion%\vehicles\chinese
@@ -299,11 +297,13 @@ mkdir %ClientLocation%\res_mods\%ClientVersion%\vehicles\italy
 mkdir %ClientLocation%\res_mods\%ClientVersion%\vehicles\poland
 mkdir %ClientLocation%\res_mods\%ClientVersion%\vehicles\russian
 mkdir %ClientLocation%\res_mods\%ClientVersion%\vehicles\sweden
+7zr.exe x AIO.7z -o%ClientLocation%\SkinTemp\AIO\Temp\
+del AIO.7z
 
-for /f "delims=\ usebackq" %%e in (ClientLocation.inf) do set DriveName=%%e
-cd /d %DriveName%
-cd %ClientLocation%\SkinTemp\Temp\
+::for /f "delims=\ usebackq" %%e in (ClientLocation.inf) do set DriveName=%%e
+::cd /d %DriveName%
+cd /d %ClientLocation%\SkinTemp\AIO\
 
-xcopy AIO %ClientLocation%\res_mods\%ClientVersion%\ /e
-
-rmdir AIO /s /q
+xcopy Temp %ClientLocation%\res_mods\%ClientVersion%\ /e
+cd /d %ClientLocation%\SkinTemp\
+goto install
