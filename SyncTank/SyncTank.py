@@ -20,8 +20,7 @@ class WindowClass(QMainWindow, form_class) :
         super().__init__()
         self.setupUi(self)
         self.load_skin_list()
-        self.btn_load.clicked.connect(self.load_skin_list)
-        self.comboBox.currentIndexChanged.connect(self.on_comboBox_changed)
+        self.listWidget.itemClicked.connect(self.on_item_clicked)
     def load_skin_list(self):
         f = open('SyncTank\Skinlist.inf', 'r')
         lines = f.readlines()
@@ -30,12 +29,21 @@ class WindowClass(QMainWindow, form_class) :
             text = i.split('_')
             print(text[0])
             print(i)
-            self.comboBox.addItem(i)
-            self.listView.addItem(i)
+            self.listWidget.addItem(i)
+            self.label.setText('Total ' + str(self.listWidget.count()) + ' Skins')
         print('@'*50)
         f.close()
-    def on_comboBox_changed(self):
-        print(f'comboBox changed : {self.comboBox.currentText()}')
+    def on_item_clicked(self, item):
+        text = item.text().split('_')
+        print(text[0])
+        print(len(text))
+        wa = ''
+        for i in range(1,len(text)):
+            wa = wa + text[i] + ' '
+        self.number.setText(text[0])
+        self.name.setText(wa)
+        print(wa)
+        #text[1:len(text)])
 if __name__ == "__main__" :
     app = QApplication(sys.argv)
     myWindow = WindowClass()
