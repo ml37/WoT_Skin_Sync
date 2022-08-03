@@ -24,7 +24,7 @@
      </rect>
     </property>
     <property name="text">
-     <string/>
+     <string>Total</string>
     </property>
    </widget>
    <widget class="QListWidget" name="listWidget">
@@ -86,6 +86,97 @@
     </property>
     <property name="text">
      <string>Download!</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lbl_Version">
+    <property name="geometry">
+     <rect>
+      <x>60</x>
+      <y>30</y>
+      <width>341</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>resmod Version</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lbl_clientlocation">
+    <property name="geometry">
+     <rect>
+      <x>60</x>
+      <y>60</y>
+      <width>331</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Client Location : </string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_opencl">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>60</y>
+      <width>41</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>open</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lbl_serverlocation">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>530</y>
+      <width>331</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Server Location : </string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_reload">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>0</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>reload list</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_openus">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>510</y>
+      <width>41</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>open</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_manuallist">
+    <property name="geometry">
+     <rect>
+      <x>50</x>
+      <y>510</y>
+      <width>91</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>manual listing</string>
     </property>
    </widget>
   </widget>
