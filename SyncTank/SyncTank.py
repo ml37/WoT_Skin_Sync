@@ -1,4 +1,5 @@
 from http import client
+from multiprocessing.connection import wait
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
@@ -6,11 +7,14 @@ from PyQt5 import uic
 import sys
 import os
 import urllib.request
+from urllib.request import Request, urlopen
 import shutil
 import zipfile
 import subprocess
 from PyQt5.QtWidgets import QApplication, QMainWindow, QTextEdit, QAction, QFileDialog
-from PyQt5.QtGui import QIcon
+from PyQt5.QtGui import *
+import PyQt5.QtGui
+#qPixmapVar = QPixmap()
 form_class = uic.loadUiType("SyncTank.ui")[0]
 FILEBROWSER_PATH = os.path.join(os.getenv('WINDIR'), 'explorer.exe')
 DataFolder = 'c:\SyncTank'
@@ -41,6 +45,7 @@ DLtemp = client_location + '\\SkinTemp' + '\\PySyncTank\\' + '\\DLtemp\\'
 Unziptemp = client_location + '\\SkinTemp' + '\\PySyncTank\\' + '\\Unziptemp\\' 
 ZipMaketemp = client_location + '\\SkinTemp' + '\\PySyncTank\\' + '\\ZipMaketemp\\'  
 country = {'A':'american', 'GB':'british', 'Ch':'chinese', 'Cz':'czech', 'F':'french', 'G':'german', 'It':'italy', 'J':'japan', 'Pl':'poland', 'R':'russian', 'S':'sweden'}
+countryimg = {'A':'usa', 'GB':'uk', 'Ch':'china', 'Cz':'czech', 'F':'france', 'G':'germany', 'It':'italy', 'J':'japan', 'Pl':'poland', 'R':'ussr', 'S':'sweden'}
 print(DLSkinlist)
 if os.path.isfile(DataFolder + '\Version.inf') == False:
     print('c:\SyncTank\Version.inf is not found')
@@ -81,7 +86,8 @@ class WindowClass(QMainWindow, form_class) :
         self.btn_opencl.clicked.connect(self.opencl)
         self.btn_openus.clicked.connect(self.openus)
         self.btn_manuallist.clicked.connect(self.manuallist)
-
+        self.btn_all.clicked.connect(self.all)
+        self.btn_cleartemp.clicked.connect(self.cleartemp)
         self.btn_openus.setEnabled(False)
         self.btn_manuallist.setEnabled(False)
         self.btn_reload.clicked.connect(self.load_skin_list)
@@ -135,7 +141,14 @@ class WindowClass(QMainWindow, form_class) :
             file = file.replace('.zip', '')
             f.write(file + '\n')
         f.close()
-
+    def cleartemp(self):
+        print('cleartemp')
+        if os.path.isdir(client_location + '\\SkinTemp' + '\\PySyncTank' + '\\DLtemp') == True:
+            shutil.rmtree(client_location + '\\SkinTemp' + '\\PySyncTank' + '\\DLtemp')
+            os.mkdir(client_location + '\\SkinTemp\\PySyncTank\\DLtemp')
+        if os.path.isdir(client_location + '\\SkinTemp' + '\\PySyncTank' + '\\Unziptemp') == True:
+            shutil.rmtree(client_location + '\\SkinTemp' + '\\PySyncTank' + '\\Unziptemp')
+            os.mkdir(client_location + '\\SkinTemp\\PySyncTank\\Unziptemp')
     def load_skin_list(self):
         self.listWidget.clear()
         urllib.request.urlretrieve(DLSkinlist, DataFolder + '/Skinlist.inf')
@@ -170,6 +183,23 @@ class WindowClass(QMainWindow, form_class) :
         string = vehicle_number
         vehicle_Countrycode = ''.join([i for i in string if not i.isdigit()])
         vehicle_country = country[vehicle_Countrycode]
+        url = 'http://tanks.gg/img/tanks/' + countryimg[vehicle_Countrycode] + '-' + lawname + '.png'
+        image=Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+        image_data = urlopen(image).read()
+        self.qPixmapWebVar = QPixmap()
+        self.qPixmapWebVar.loadFromData(image_data)
+        self.qPixmapWebVar = self.qPixmapWebVar.scaledToWidth(360) # 480x300 320x200 360x240
+        self.lbl_img.setPixmap(self.qPixmapWebVar)
+        url_flag = 'http://tanks.gg/img/nations/germany.svg'
+        url_flag = 'http://tanks.gg/img/nations/' + countryimg[vehicle_Countrycode] + '.svg'
+        image_flag = Request(url_flag, headers={'User-Agent': 'Mozilla/5.0'})
+        image_data_flag = urlopen(image_flag).read()
+        self.qPixmapWebVar_flag = QPixmap()
+        self.qPixmapWebVar_flag.loadFromData(image_data_flag)
+        self.qPixmapWebVar_flag = self.qPixmapWebVar_flag.scaledToWidth(100)
+        self.lbl_img_2.setPixmap(self.qPixmapWebVar_flag)
+        
+        
     def download(self): 
         print('!'*50)
         print(self.listWidget.currentItem().text())
@@ -192,6 +222,11 @@ class WindowClass(QMainWindow, form_class) :
             print('File Exists')
         else:
             shutil.copytree(Unziptemp + lawname, client_location + '/res_mods/' + Version + '/vehicles/' + vehicle_country + '/' + lawname)
+    def all(self):
+        for i in range(self.listWidget.count()):
+            self.listWidget.item(i).setSelected(True)
+            self.on_item_clicked(self.listWidget.item(i))
+            self.download()
     def dragEnterEvent(self, event):
         if event.mimeData().hasUrls():
             event.accept()
@@ -208,25 +243,28 @@ class WindowClass(QMainWindow, form_class) :
             name = name
             print(name)
             print(f)
-            zipmake = zipfile.ZipFile(f + '.zip', 'w')
-            for folder, subfolders, files in os.walk(f):
-                for file in files:
-                    if file.endswith('.dds'):
-                        zipmake.write(os.path.join(folder, file), os.path.relpath(os.path.join(folder,file), f), compress_type = zipfile.ZIP_DEFLATED)
-                    elif file.endswith('.psd'):
-                        zipmake.write(os.path.join(folder, file), os.path.relpath(os.path.join(folder,file), f), compress_type = zipfile.ZIP_DEFLATED)
-            zipmake.close()
             if server_location == 'error':
                 print('auto upload disabled')
             else:
-                if os.path.exists(server_location + '/' + f + '.zip'):
-                    print('File Exists')
+                if os.path.exists(server_location + '/' + name + '.zip') == True:
+                    print(f'Upload Error File Exists {name}')
                 else:
+                    zipmake = zipfile.ZipFile(f + '.zip', 'w')
+                    for folder, subfolders, files in os.walk(f):
+                        for file in files:
+                            if file.endswith('.dds'):
+                                zipmake.write(os.path.join(folder, file), os.path.relpath(os.path.join(folder,file), f), compress_type = zipfile.ZIP_DEFLATED)
+                            elif file.endswith('.psd'):
+                                zipmake.write(os.path.join(folder, file), os.path.relpath(os.path.join(folder,file), f), compress_type = zipfile.ZIP_DEFLATED)
+                    zipmake.close()
                     shutil.move(f + '.zip', server_location)
-                    print(f + '.zip' + ' uploaded')
+                    print(name + '.zip' + ' uploaded')
                     with open(server_location + '/Skinlist.inf', 'a') as f:
                         f.write(name + '\n')
+            
+            
         print('$'*50)
+        self.load_skin_list()
 
     def opencl(self):
             # explorer would choke on forward slashes
