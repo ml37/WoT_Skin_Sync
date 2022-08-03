@@ -40,16 +40,16 @@
    <widget class="QLabel" name="name">
     <property name="geometry">
      <rect>
-      <x>290</x>
-      <y>110</y>
+      <x>380</x>
+      <y>120</y>
       <width>361</width>
-      <height>41</height>
+      <height>50</height>
      </rect>
     </property>
     <property name="font">
      <font>
       <family>MS Sans Serif</family>
-      <pointsize>20</pointsize>
+      <pointsize>38</pointsize>
      </font>
     </property>
     <property name="text">
@@ -59,8 +59,8 @@
    <widget class="QLabel" name="number">
     <property name="geometry">
      <rect>
-      <x>290</x>
-      <y>80</y>
+      <x>380</x>
+      <y>100</y>
       <width>361</width>
       <height>41</height>
      </rect>
@@ -79,9 +79,9 @@
     <property name="geometry">
      <rect>
       <x>280</x>
-      <y>410</y>
+      <y>400</y>
       <width>211</width>
-      <height>31</height>
+      <height>41</height>
      </rect>
     </property>
     <property name="text">
@@ -130,7 +130,7 @@
    <widget class="QLabel" name="lbl_serverlocation">
     <property name="geometry">
      <rect>
-      <x>10</x>
+      <x>20</x>
       <y>530</y>
       <width>331</width>
       <height>21</height>
@@ -156,7 +156,7 @@
    <widget class="QPushButton" name="btn_openus">
     <property name="geometry">
      <rect>
-      <x>10</x>
+      <x>20</x>
       <y>510</y>
       <width>41</width>
       <height>23</height>
@@ -169,7 +169,7 @@
    <widget class="QPushButton" name="btn_manuallist">
     <property name="geometry">
      <rect>
-      <x>50</x>
+      <x>60</x>
       <y>510</y>
       <width>91</width>
       <height>23</height>
@@ -177,6 +177,58 @@
     </property>
     <property name="text">
      <string>manual listing</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_all">
+    <property name="geometry">
+     <rect>
+      <x>240</x>
+      <y>80</y>
+      <width>31</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>All</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_cleartemp">
+    <property name="geometry">
+     <rect>
+      <x>150</x>
+      <y>510</y>
+      <width>81</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Clear Temp</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lbl_img">
+    <property name="geometry">
+     <rect>
+      <x>280</x>
+      <y>160</y>
+      <width>360</width>
+      <height>240</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>IMG</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lbl_img_2">
+    <property name="geometry">
+     <rect>
+      <x>280</x>
+      <y>110</y>
+      <width>100</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Flag</string>
     </property>
    </widget>
   </widget>
