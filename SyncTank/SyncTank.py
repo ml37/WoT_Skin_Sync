@@ -1,8 +1,7 @@
-from http import client
-from multiprocessing.connection import wait
-from PyQt5.QtWidgets import *
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
+from PyQt5.QtWidgets import QPushButton, QWidget, QLabel, QApplication, QMainWindow, QFileDialog, QAction
+#from PyQt5.QtCore import *
+#from PyQt5.QtGui import *
+from PyQt5.QtGui import QIcon
 from PyQt5 import uic
 import sys
 import os
@@ -11,9 +10,6 @@ from urllib.request import Request, urlopen
 import shutil
 import zipfile
 import subprocess
-from PyQt5.QtWidgets import QApplication, QMainWindow, QTextEdit, QAction, QFileDialog
-from PyQt5.QtGui import *
-import PyQt5.QtGui
 #qPixmapVar = QPixmap()
 form_class = uic.loadUiType("SyncTank.ui")[0]
 FILEBROWSER_PATH = os.path.join(os.getenv('WINDIR'), 'explorer.exe')
@@ -23,6 +19,20 @@ if os.path.isdir(DataFolder) == False:
     os.mkdir(DataFolder)
 if os.path.isdir(DataFolder + '\Zipmaker') == False:
     os.mkdir(DataFolder + '\Zipmaker')
+if os.path.isfile(DataFolder + '\DLserver.inf') == False:
+    with open(DataFolder + '\DLserver.inf', 'w') as f:
+        f.write('mashiro37.i234.me')
+with open(DataFolder + '\DLserver.inf', 'r') as f:
+    DLServer = f.read()
+    print(DLServer)
+    if DLServer == 'mashiro37.i234.me':
+        print('DLserver is mashiro37.i234.me')
+        DLServer = 'http://' + 'mashiro37.i234.me'
+    else:
+        print('DLserver is other')
+        print(f'Notice : DLserver is {DLServer}')
+        DLServer = 'http://' + DLServer
+    
 if os.path.isfile(DataFolder + '\ClientLocation.inf') == False:
     print(f'{DataFolder}\ClientLocation.inf is not found')
     client_location = 'error'
@@ -38,7 +48,7 @@ else:
         server_location = f.readline()
         print(f'server location : {server_location}')
 print('@'*50)
-DLServer = 'http://' + 'mashiro37.i234.me'
+#DLServer = 'http://' + 'mashiro37.i234.me'
 DLSkinlist = DLServer + '/WoTskin/' + 'PySkin/' + 'Skinlist.inf'
 DLVersion = DLServer + '/WoTskin/' + 'Version.inf'
 DLtemp = client_location + '\\SkinTemp' + '\\PySyncTank\\' + '\\DLtemp\\'
@@ -49,10 +59,20 @@ countryimg = {'A':'usa', 'GB':'uk', 'Ch':'china', 'Cz':'czech', 'F':'france', 'G
 print(DLSkinlist)
 if os.path.isfile(DataFolder + '\Version.inf') == False:
     print('c:\SyncTank\Version.inf is not found')
-    urllib.request.urlretrieve(DLVersion, DataFolder + '/Version.inf')
+    try:
+        urllib.request.urlretrieve(DLVersion, DataFolder + '/Version.inf')
+    except urllib.error.HTTPError as e:
+        print(e.__dict__)
+    except urllib.error.URLError as e:
+        print(e.__dict__)
 if os.path.isfile(DataFolder + '\Skinlist.inf') == False:
     print('c:\SyncTank\Skinlist.inf is not found')
-    urllib.request.urlretrieve(DLSkinlist, DataFolder + '/Skinlist.inf')
+    try:
+        urllib.request.urlretrieve(DLSkinlist, DataFolder + '/Skinlist.inf')
+    except urllib.error.HTTPError as e:
+        print(e.__dict__)
+    except urllib.error.URLError as e:
+        print(e.__dict__)
 Version = 'error'
 with open(DataFolder + '\Version.inf', 'r') as f:
     Version = f.readline()
@@ -94,6 +114,7 @@ class WindowClass(QMainWindow, form_class) :
         self.setAcceptDrops(True)
         selClientLoc = QAction('Select Game Client Location', self)
         selClientLoc.triggered.connect(self.selClientLocation)
+        self.setWindowIcon(QIcon('icon.png'))
         
         selServerLoc = QAction('Select Upload Server Location', self)
         selServerLoc.triggered.connect(self.selServerLocation)
@@ -151,7 +172,16 @@ class WindowClass(QMainWindow, form_class) :
             os.mkdir(client_location + '\\SkinTemp\\PySyncTank\\Unziptemp')
     def load_skin_list(self):
         self.listWidget.clear()
-        urllib.request.urlretrieve(DLSkinlist, DataFolder + '/Skinlist.inf')
+        try:
+            urllib.request.urlretrieve(DLSkinlist, DataFolder + '/Skinlist.inf')
+        except urllib.error.HTTPError as e:
+            print(e.__dict__)
+            self.btn_download.setEnabled(False)
+        except urllib.error.URLError as e:
+            print(e.__dict__)
+            self.btn_download.setEnabled(False)
+            self.lbl_error.setText('Error!')
+            self.lbl_error_2.setText(str(e.reason))
         f = open(DataFolder + '\Skinlist.inf', 'r')
         lines = f.readlines()
         for i in lines[0:]:
@@ -164,6 +194,7 @@ class WindowClass(QMainWindow, form_class) :
         self.lbl_Version.setText('Version : ' + Version)
         self.lbl_clientlocation.setText('Client Location : ' + client_location)
         self.lbl_serverlocation.setText('Server Location : ' + server_location)
+        self.lbl_DLserver.setText('DL Server : ' + DLServer)
     def on_item_clicked(self, item):
         
         text = item.text().split('_')
@@ -184,7 +215,16 @@ class WindowClass(QMainWindow, form_class) :
         vehicle_Countrycode = ''.join([i for i in string if not i.isdigit()])
         vehicle_country = country[vehicle_Countrycode]
         url = 'http://tanks.gg/img/tanks/' + countryimg[vehicle_Countrycode] + '-' + lawname + '.png'
-        image=Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+        try:
+            image=Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+        except urllib.error.HTTPError as e:
+            print(e.__dict__)
+            self.btn_download.setEnabled(False)
+        except urllib.error.URLError as e:
+            print(e.__dict__)
+            self.btn_download.setEnabled(False)
+            self.lbl_error.setText('Error!')
+            self.lbl_error_2.setText(str(e.reason))
         image_data = urlopen(image).read()
         self.qPixmapWebVar = QPixmap()
         self.qPixmapWebVar.loadFromData(image_data)
@@ -192,7 +232,16 @@ class WindowClass(QMainWindow, form_class) :
         self.lbl_img.setPixmap(self.qPixmapWebVar)
         url_flag = 'http://tanks.gg/img/nations/germany.svg'
         url_flag = 'http://tanks.gg/img/nations/' + countryimg[vehicle_Countrycode] + '.svg'
-        image_flag = Request(url_flag, headers={'User-Agent': 'Mozilla/5.0'})
+        try:
+            image_flag = Request(url_flag, headers={'User-Agent': 'Mozilla/5.0'})
+        except urllib.error.HTTPError as e:
+            print(e.__dict__)
+            self.btn_download.setEnabled(False)
+        except urllib.error.URLError as e:
+            print(e.__dict__)
+            self.btn_download.setEnabled(False)
+            self.lbl_error.setText('Error!')
+            self.lbl_error_2.setText(str(e.reason))
         image_data_flag = urlopen(image_flag).read()
         self.qPixmapWebVar_flag = QPixmap()
         self.qPixmapWebVar_flag.loadFromData(image_data_flag)
@@ -208,7 +257,16 @@ class WindowClass(QMainWindow, form_class) :
         if os.path.exists(DLtemp + lawname + '.zip'):
             print('File Exists')
         else:
-            urllib.request.urlretrieve(downloadURL, lawname + '.zip')
+            try:
+                urllib.request.urlretrieve(downloadURL, lawname + '.zip')
+            except urllib.error.HTTPError as e:
+                print(e.__dict__)
+                self.btn_download.setEnabled(False)
+            except urllib.error.URLError as e:
+                print(e.__dict__)
+                self.btn_download.setEnabled(False)
+                self.lbl_error.setText('Error!')
+                self.lbl_error_2.setText(str(e.reason))
             shutil.move(lawname + '.zip', DLtemp)
         zipzip = zipfile.ZipFile(DLtemp + lawname + '.zip', 'r')
         zipzip.extractall(path=Unziptemp + lawname)
