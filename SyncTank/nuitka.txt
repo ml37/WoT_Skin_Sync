@@ -1,0 +1,1 @@
+nuitka --standalone --windows-icon-from-ico=icon.ico --disable-console --windows-company-name=MGDC --windows-product-name=SyncTank --windows-file-version=1.0 --windows-product-version=1.0 --windows-file-description='WoT_Skin_Installer_by_MGDC SyncTank.py --run
