@@ -16,7 +16,7 @@ from PyQt5.QtGui import *
 import PyQt5.QtGui
 import re
 
-p = re.compile('.[.]..[.].[.].')
+p = re.compile('.[.]..[.].[.].') # 문자 싹 날리면 점 4개 남음 
 os.chdir('res_mods')
 for i in os.listdir():
     d = p.findall(i)
