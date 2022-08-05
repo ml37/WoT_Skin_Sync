@@ -1,7 +1,9 @@
 from PyQt5.QtWidgets import QPushButton, QWidget, QLabel, QApplication, QMainWindow, QFileDialog, QAction
 #from PyQt5.QtCore import *
+from PyQt5.QtGui import QPixmap
 #from PyQt5.QtGui import *
 from PyQt5.QtGui import QIcon
+from PyQt5.QtCore import Qt
 from PyQt5 import uic
 import sys
 import os
