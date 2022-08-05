@@ -105,6 +105,7 @@ class WindowClass(QMainWindow, form_class) :
         self.load_skin_list()
         self.listWidget.itemClicked.connect(self.on_item_clicked)
         self.btn_download.clicked.connect(self.download)
+        self.btn_download.setEnabled(False)
         self.btn_opencl.clicked.connect(self.opencl)
         self.btn_openus.clicked.connect(self.openus)
         self.btn_manuallist.clicked.connect(self.manuallist)
@@ -114,6 +115,7 @@ class WindowClass(QMainWindow, form_class) :
         self.btn_manuallist.setEnabled(False)
         self.btn_reload.clicked.connect(self.load_skin_list)
         self.btn_open_skin.clicked.connect(self.open_skin)
+        self.btn_open_skin.setEnabled(False)
         self.setAcceptDrops(True)
         selClientLoc = QAction('Select Game Client Location', self)
         selClientLoc.triggered.connect(self.selClientLocation)
@@ -199,7 +201,8 @@ class WindowClass(QMainWindow, form_class) :
         self.lbl_serverlocation.setText('Server Location : ' + server_location)
         self.lbl_DLserver.setText('DL Server : ' + DLServer)
     def on_item_clicked(self, item):
-        
+        self.btn_open_skin.setEnabled(True)
+        self.btn_download.setEnabled(True)
         text = item.text().split('_')
         wa = ''
         for i in range(1,len(text)):
@@ -326,8 +329,8 @@ class WindowClass(QMainWindow, form_class) :
             
         print('$'*50)
         self.load_skin_list()
-    def open_skin():
-        path = client_location.replace('/', '\\')
+    def open_skin(self):
+        path = client_location + '/res_mods/' + Version + '/vehicles/' + vehicle_country + '/' + self.listWidget.currentItem().text().replace('/', '\\')
         path = os.path.normpath(path)
         if os.path.isdir(path):
             subprocess.run([FILEBROWSER_PATH, path])
