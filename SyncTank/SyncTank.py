@@ -113,6 +113,7 @@ class WindowClass(QMainWindow, form_class) :
         self.btn_openus.setEnabled(False)
         self.btn_manuallist.setEnabled(False)
         self.btn_reload.clicked.connect(self.load_skin_list)
+        self.btn_open_skin.clicked.connect(self.open_skin)
         self.setAcceptDrops(True)
         selClientLoc = QAction('Select Game Client Location', self)
         selClientLoc.triggered.connect(self.selClientLocation)
@@ -249,7 +250,7 @@ class WindowClass(QMainWindow, form_class) :
         self.qPixmapWebVar_flag.loadFromData(image_data_flag)
         self.qPixmapWebVar_flag = self.qPixmapWebVar_flag.scaledToWidth(100)
         self.lbl_img_2.setPixmap(self.qPixmapWebVar_flag)
-        
+    
         
     def download(self): 
         print('!'*50)
@@ -325,7 +326,13 @@ class WindowClass(QMainWindow, form_class) :
             
         print('$'*50)
         self.load_skin_list()
-
+    def open_skin():
+        path = client_location.replace('/', '\\')
+        path = os.path.normpath(path)
+        if os.path.isdir(path):
+            subprocess.run([FILEBROWSER_PATH, path])
+        elif os.path.isfile(path):
+            subprocess.run([FILEBROWSER_PATH, '/select,', os.path.normpath(path)])
     def opencl(self):
             # explorer would choke on forward slashes
         path = client_location.replace('/', '\\')
