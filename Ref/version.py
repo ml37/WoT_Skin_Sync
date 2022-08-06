@@ -16,15 +16,27 @@ from PyQt5.QtGui import *
 import PyQt5.QtGui
 import re
 
-p = re.compile('.[.]..[.].[.].') # 문자 싹 날리면 점 4개 남음 
+'''p = re.compile('.[.]..[.].[.].') # 문자 싹 날리면 점 3개 남음 
 os.chdir('res_mods')
 for i in os.listdir():
     d = p.findall(i)
     if d == []:
         continue
     print(d)
-print(d)
-    
+print(d)'''
+string = '1.17.1.0'
+print(os.listdir())
+os.chdir('res_mods')
+print(os.listdir())
+for i in os.listdir():
+    newstring = re.sub(r'[0-9]+', '', string)
+    print(newstring)
+    if newstring == '...':
+        print('walalaru')
+        print(i)
+        
+
+
 
 
 
