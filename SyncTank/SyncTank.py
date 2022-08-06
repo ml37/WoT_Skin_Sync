@@ -1,8 +1,5 @@
 from PyQt5.QtWidgets import QPushButton, QWidget, QLabel, QApplication, QMainWindow, QFileDialog, QAction
-#from PyQt5.QtCore import *
-from PyQt5.QtGui import QPixmap
-#from PyQt5.QtGui import *
-from PyQt5.QtGui import QIcon
+from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtCore import Qt
 from PyQt5 import uic
 import sys
@@ -11,46 +8,54 @@ import urllib.request
 from urllib.request import Request, urlopen
 import shutil
 import zipfile
-import subprocess
-#qPixmapVar = QPixmap()
 form_class = uic.loadUiType("SyncTank.ui")[0]
-FILEBROWSER_PATH = os.path.join(os.getenv('WINDIR'), 'explorer.exe')
+
+########################################################
 DataFolder = 'c:\SyncTank'
-print('@'*50)
+########################################################
+#Find Data folder. If not found, create it.
 if os.path.isdir(DataFolder) == False:
+    print('Data folder not found. Creating it.')
     os.mkdir(DataFolder)
+########################################################
+#Find Data folder/Zipmaker. If not found, create it. Zipmaker is used to create zip files.
 if os.path.isdir(DataFolder + '\Zipmaker') == False:
+    print('Zipmaker folder not found. Creating it.')
     os.mkdir(DataFolder + '\Zipmaker')
+########################################################
+#Find Data folder/DLserver.inf. If not found, create it. DLserver.inf is used to store the server information.
 if os.path.isfile(DataFolder + '\DLserver.inf') == False:
     with open(DataFolder + '\DLserver.inf', 'w') as f:
-        f.write('mashiro37.i234.me')
+        f.write('mashiro37.i234.me') #My server :)
+########################################################
+#Open DLserver.inf and read the server address.
 with open(DataFolder + '\DLserver.inf', 'r') as f:
     DLServer = f.read()
-    print(DLServer)
     if DLServer == 'mashiro37.i234.me':
-        print('DLserver is mashiro37.i234.me')
+        print('Notice : DLserver set mashiro37.i234.me(Default)')
         DLServer = 'http://' + 'mashiro37.i234.me'
     else:
-        print('DLserver is other')
-        print(f'Notice : DLserver is {DLServer}')
+        print(f'Notice : DLserver set {DLServer}')
         DLServer = 'http://' + DLServer
-    
+########################################################
+#Open ClientLoaction.inf and read the client location.
 if os.path.isfile(DataFolder + '\ClientLocation.inf') == False:
-    print(f'{DataFolder}\ClientLocation.inf is not found')
+    print(f'ERROR! : {DataFolder}\ClientLocation.inf is not found')
     client_location = 'error'
-else:
+else: #If ClientLocation.inf is found, read the location.
     with open(DataFolder + '\ClientLocation.inf', 'r') as f:
         client_location = f.readline()
-        print(f'client location : {client_location}')
-if os.path.isfile(DataFolder + '\Zipmaker' +'\ServerLocation.inf') == False:
-    print(f'{DataFolder}\Zipmaker\ServerLocation.inf is not found')
+        print(f'Notice : client location : {client_location}')
+########################################################
+#Open ServerLocation.inf and read the server location.
+if os.path.isfile(DataFolder + '\Zipmaker' +'\ServerLocation.inf') == False: #If ServerLocation.inf is not found, set server_location to error.
+    print(f'ERROR! : {DataFolder}\Zipmaker\ServerLocation.inf is not found')
     server_location = 'error'
 else:
-    with open(DataFolder + '\Zipmaker' +'\ServerLocation.inf', 'r') as f:
+    with open(DataFolder + '\Zipmaker' +'\ServerLocation.inf', 'r') as f: #If ServerLocation.inf is found, read the location.
         server_location = f.readline()
-        print(f'server location : {server_location}')
-print('@'*50)
-#DLServer = 'http://' + 'mashiro37.i234.me'
+        print(f'Notice : server location : {server_location}')
+########################################################
 DLSkinlist = DLServer + '/WoTskin/' + 'PySkin/' + 'Skinlist.inf'
 DLVersion = DLServer + '/WoTskin/' + 'Version.inf'
 DLtemp = client_location + '\\SkinTemp' + '\\PySyncTank\\' + '\\DLtemp\\'
@@ -58,7 +63,8 @@ Unziptemp = client_location + '\\SkinTemp' + '\\PySyncTank\\' + '\\Unziptemp\\'
 ZipMaketemp = client_location + '\\SkinTemp' + '\\PySyncTank\\' + '\\ZipMaketemp\\'  
 country = {'A':'american', 'GB':'british', 'Ch':'chinese', 'Cz':'czech', 'F':'french', 'G':'german', 'It':'italy', 'J':'japan', 'Pl':'poland', 'R':'russian', 'S':'sweden'}
 countryimg = {'A':'usa', 'GB':'uk', 'Ch':'china', 'Cz':'czech', 'F':'france', 'G':'germany', 'It':'italy', 'J':'japan', 'Pl':'poland', 'R':'ussr', 'S':'sweden'}
-print(DLSkinlist)
+########################################################
+#Find Version.inf and read game version.
 if os.path.isfile(DataFolder + '\Version.inf') == False:
     print('c:\SyncTank\Version.inf is not found')
     try:
@@ -97,6 +103,7 @@ else:
             os.mkdir(client_location + '\\res_mods\\' + Version)
         if os.path.isdir(client_location + '\\res_mods\\' + Version + '\\vehicles') == False:
             os.mkdir(client_location + '\\res_mods\\' + Version + '\\vehicles')
+
 
 class WindowClass(QMainWindow, form_class) :
     def __init__(self) :
@@ -182,6 +189,8 @@ class WindowClass(QMainWindow, form_class) :
         except urllib.error.HTTPError as e:
             print(e.__dict__)
             self.btn_download.setEnabled(False)
+            self.lbl_error.setText('Error!')
+            self.lbl_error_2.setText(str(e.reason))
         except urllib.error.URLError as e:
             print(e.__dict__)
             self.btn_download.setEnabled(False)
@@ -330,28 +339,39 @@ class WindowClass(QMainWindow, form_class) :
         print('$'*50)
         self.load_skin_list()
     def open_skin(self):
-        path = client_location + '/res_mods/' + Version + '/vehicles/' + vehicle_country + '/' + self.listWidget.currentItem().text().replace('/', '\\')
-        path = os.path.normpath(path)
-        if os.path.isdir(path):
+        if os.path.isdir(client_location + '/res_mods/' + Version + '/vehicles/' + vehicle_country) == True:
+            if os.path.isdir(client_location + '/res_mods/' + Version + '/vehicles/' + vehicle_country + '/' + lawname) == True:
+                os.startfile(client_location + '/res_mods/' + Version + '/vehicles/' + vehicle_country + '/' + lawname)
+            else:
+                print('Folder not found')
+        else:
+            print('Folder not found')
+        '''path = client_location + '/res_mods/' + Version + '/vehicles/' + vehicle_country + '/' + self.listWidget.currentItem().text().replace('/', '\\')
+        path = os.path.normpath(path)'''
+        '''if os.path.isdir(path):
             subprocess.run([FILEBROWSER_PATH, path])
         elif os.path.isfile(path):
-            subprocess.run([FILEBROWSER_PATH, '/select,', os.path.normpath(path)])
+            subprocess.run([FILEBROWSER_PATH, '/select,', os.path.normpath(path)])'''
     def opencl(self):
             # explorer would choke on forward slashes
         path = client_location.replace('/', '\\')
         path = os.path.normpath(path)
         if os.path.isdir(path):
+            os.startfile(path)
+        '''if os.path.isdir(path):
             subprocess.run([FILEBROWSER_PATH, path])
         elif os.path.isfile(path):
-            subprocess.run([FILEBROWSER_PATH, '/select,', os.path.normpath(path)])
+            subprocess.run([FILEBROWSER_PATH, '/select,', os.path.normpath(path)])'''
     def openus(self):
             # explorer would choke on forward slashes
         path = server_location.replace('/', '\\')
         path = os.path.normpath(path)
         if os.path.isdir(path):
+            os.startfile(path)
+        '''if os.path.isdir(path):
             subprocess.run([FILEBROWSER_PATH, path])
         elif os.path.isfile(path):
-            subprocess.run([FILEBROWSER_PATH, '/select,', os.path.normpath(path)])
+            subprocess.run([FILEBROWSER_PATH, '/select,', os.path.normpath(path)])'''
 if __name__ == "__main__" :
     app = QApplication(sys.argv)
     myWindow = WindowClass()
