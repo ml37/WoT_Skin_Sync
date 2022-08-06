@@ -1,3 +1,4 @@
+from mailbox import linesep
 from PyQt5.QtWidgets import QPushButton, QWidget, QLabel, QApplication, QMainWindow, QFileDialog, QAction
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtCore import Qt
@@ -9,6 +10,7 @@ from urllib.request import Request, urlopen
 import shutil
 import zipfile
 import threading
+import re
 form_class = uic.loadUiType("SyncTank.ui")[0]
 
 ########################################################
@@ -74,22 +76,8 @@ if os.path.isfile(DataFolder + '\Skinlist.inf') == False:
         print(e.__dict__)
     except urllib.error.URLError as e:
         print(e.__dict__)
-########################################################
-#Find Version.inf. If not found, create it. Version.inf is used to store the version information.
-if os.path.isfile(DataFolder + '\Version.inf') == False:
-    print('c:\SyncTank\Version.inf is not found')
-    try:
-        urllib.request.urlretrieve(DLVersion, DataFolder + '/Version.inf')
-    except urllib.error.HTTPError as e:
-        print(e.__dict__)
-    except urllib.error.URLError as e:
-        print(e.__dict__)
-########################################################
-#Version.inf is read and stored in version.
-Version = 'error' 
-with open(DataFolder + '\Version.inf', 'r') as f:
-    Version = f.readline()
-    print(f'Notice : Version is {Version}')
+
+
 ########################################################
 #Critical Error
 if client_location == 'error':
@@ -103,13 +91,41 @@ else:
         os.mkdir(client_location + '\\SkinTemp\\PySyncTank\\DLtemp')
     if os.path.isdir(client_location + '\\SkinTemp' + '\\PySyncTank' + '\\Unziptemp') == False:
         os.mkdir(client_location + '\\SkinTemp\\PySyncTank\\Unziptemp')
-    if Version == 'error':
-        print('Version is not found')
+    Version = 'error'
+    if os.path.isfile(client_location + '\\paths.xml') == False:
+        print('Auto Version Detecte Failed')
+        ########################################################
+        #Find Version.inf. If not found, create it. Version.inf is used to store the version information.
+        if os.path.isfile(DataFolder + '\Version.inf') == False:
+            print('c:\SyncTank\Version.inf is not found')
+            try:
+                urllib.request.urlretrieve(DLVersion, DataFolder + '/Version.inf')
+            except urllib.error.HTTPError as e:
+                print(e.__dict__)
+            except urllib.error.URLError as e:
+                print(e.__dict__)
+        ########################################################
+        #Version.inf is read and stored in version.
+        Version = 'error' 
+        with open(DataFolder + '\Version.inf', 'r') as f:
+            Version = f.readline()
+            print(f'Notice : Version.inf Read! Version is {Version}')
+        if Version == 'error':
+            print('Version is not found')
+        else:
+            if os.path.isdir(client_location + '\\res_mods\\' + Version) == False:
+                os.mkdir(client_location + '\\res_mods\\' + Version)
+            if os.path.isdir(client_location + '\\res_mods\\' + Version + '\\vehicles') == False:
+                os.mkdir(client_location + '\\res_mods\\' + Version + '\\vehicles')
     else:
-        if os.path.isdir(client_location + '\\res_mods\\' + Version) == False:
-            os.mkdir(client_location + '\\res_mods\\' + Version)
-        if os.path.isdir(client_location + '\\res_mods\\' + Version + '\\vehicles') == False:
-            os.mkdir(client_location + '\\res_mods\\' + Version + '\\vehicles')
+        r = open(client_location + '\\paths.xml', 'r')
+        for line in r:
+            if '/res_mods/' in line:
+                '''    <Path cacheSubdirs="true">./res_mods/1.17.1.0</Path>'''
+                Version = line.split('/res_mods/')[1].split('</Path>')[0]
+                print(f'Notice : path is {Version}')
+                break
+        r.close()
 
 
 class WindowClass(QMainWindow, form_class) :
@@ -220,7 +236,6 @@ class WindowClass(QMainWindow, form_class) :
             text = i.split('_')
             self.listWidget.addItem(i)
             self.label.setText('Total ' + str(self.listWidget.count()) + ' Skins')
-        print('@'*50)
         f.close()
         self.lbl_Version.setText('Version : ' + Version)
         self.lbl_clientlocation.setText('Client Location : ' + client_location)
