@@ -124,7 +124,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>open</string>
+     <string>Open</string>
     </property>
    </widget>
    <widget class="QLabel" name="lbl_serverlocation">
@@ -150,7 +150,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>reload list</string>
+     <string>Reload list</string>
     </property>
    </widget>
    <widget class="QPushButton" name="btn_openus">
