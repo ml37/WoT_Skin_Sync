@@ -65,6 +65,7 @@ DLtemp = client_location + '\\SkinTemp' + '\\PySyncTank\\' + '\\DLtemp\\'
 Unziptemp = client_location + '\\SkinTemp' + '\\PySyncTank\\' + '\\Unziptemp\\' 
 ZipMaketemp = client_location + '\\SkinTemp' + '\\PySyncTank\\' + '\\ZipMaketemp\\'  
 country = {'A':'american', 'GB':'british', 'Ch':'chinese', 'Cz':'czech', 'F':'french', 'G':'german', 'It':'italy', 'J':'japan', 'Pl':'poland', 'R':'russian', 'S':'sweden'}
+country_reverse = {'american':'A', 'british':'GB', 'chinese':'Ch', 'czech':'Cz', 'french':'F', 'german':'G', 'italy':'It', 'japan':'J', 'poland':'Pl', 'russian':'R', 'sweden':'S'}
 countryimg = {'A':'usa', 'GB':'uk', 'Ch':'china', 'Cz':'czech', 'F':'france', 'G':'germany', 'It':'italy', 'J':'japan', 'Pl':'poland', 'R':'ussr', 'S':'sweden'}
 ########################################################
 #Find SkinList.inf. If Not Exists, Download Skinlist.inf.
@@ -148,6 +149,8 @@ class WindowClass(QMainWindow, form_class) :
         self.btn_reload.clicked.connect(self.load_skin_list)
         self.btn_open_skin.clicked.connect(self.open_skin)
         self.btn_opentemp.clicked.connect(self.opentemp)
+        self.cb_country.currentIndexChanged.connect(self.country_change)
+        self.btn_change_DLserver.clicked.connect(self.change_DLserver)
         ########################################################
         #setEnabled
         self.btn_open_skin.setEnabled(False)
@@ -177,7 +180,6 @@ class WindowClass(QMainWindow, form_class) :
         else:
             self.btn_openus.setEnabled(True)
             self.btn_manuallist.setEnabled(True)
-    
     def selClientLocation(self):
         fname = QFileDialog.getExistingDirectory(self, 'Select Game Client(World_of_Tanks_ASIA) Location', './')
         if fname[0]:
@@ -192,6 +194,9 @@ class WindowClass(QMainWindow, form_class) :
                 f = open(DataFolder + '\Zipmaker' +'\ServerLocation.inf', 'w')
                 f.write(fname)
                 f.close()
+            self.lbl_serverlocation.setText('Server Location : ' + fname + 'To use this options, please restart the program')
+            self.btn_openus.setVisible(True)
+            self.btn_manuallist.setVisible(True)
     def manuallist(self):
         path = server_location
         file_list = os.listdir(path)
@@ -215,6 +220,57 @@ class WindowClass(QMainWindow, form_class) :
             os.startfile(client_location + '\\SkinTemp' + '\\PySyncTank' + '\\DLtemp')
         if os.path.isdir(client_location + '\\SkinTemp' + '\\PySyncTank' + '\\Unziptemp') == True:
             os.startfile(client_location + '\\SkinTemp' + '\\PySyncTank' + '\\Unziptemp')
+    def country_change(self):
+        def load_flag_from_web():
+                url_flag = 'http://tanks.gg/img/nations/' + countryimg[country_reverse[self.cb_country.currentText()]] + '.svg'
+                try:
+                    image_flag = Request(url_flag, headers={'User-Agent': 'Mozilla/5.0'})
+                except urllib.error.HTTPError as e:
+                    print(e.__dict__)
+                    self.btn_download.setEnabled(False)
+                except urllib.error.URLError as e:
+                    print(e.__dict__)
+                    self.btn_download.setEnabled(False)
+                    self.lbl_error.setText('Error!')
+                    self.lbl_error_2.setText(str(e.reason))
+                image_data_flag = urlopen(image_flag).read()
+                self.qPixmapWebVar_flag = QPixmap()
+                self.qPixmapWebVar_flag.loadFromData(image_data_flag)
+                self.qPixmapWebVar_flag = self.qPixmapWebVar_flag.scaledToWidth(60)
+                self.lbl_img_2.setPixmap(self.qPixmapWebVar_flag)
+                self.lbl_img_2.setHidden(False)
+        if self.cb_country.currentText() == 'All':
+            self.load_skin_list()
+        else:
+            print(f'country_change {self.cb_country.currentText()}')
+            self.listWidget.clear()
+            try:
+                urllib.request.urlretrieve(DLSkinlist, DataFolder + '/Skinlist.inf')
+            except urllib.error.HTTPError as e:
+                print(e.__dict__)
+                self.btn_download.setEnabled(False)
+                self.lbl_error.setText('Error!')
+                self.lbl_error_2.setText(str(e.reason))
+            except urllib.error.URLError as e:
+                print(e.__dict__)
+                self.btn_download.setEnabled(False)
+                self.lbl_error.setText('Error!')
+                self.lbl_error_2.setText(str(e.reason))
+            f = open(DataFolder + '\Skinlist.inf', 'r')
+            lines = f.readlines()
+            for i in lines[0:]:
+                i = i.strip()
+                text = i.split('_')
+                string = text[0]
+                newstring = re.sub(r'[0-9]+', '', string)
+                if newstring == country_reverse[self.cb_country.currentText()]:
+                    self.listWidget.addItem(i)
+            f.close()
+            self.label.setText('Total ' + skin_count + ' Skins, ' + self.cb_country.currentText() + ' listed ' + str(self.listWidget.count()) + ' Skins')
+            t1 = threading.Thread(target=load_flag_from_web)
+            t1.start()
+            
+        
     def load_skin_list(self):
         self.listWidget.clear()
         try:
@@ -235,11 +291,17 @@ class WindowClass(QMainWindow, form_class) :
             i = i.strip()
             text = i.split('_')
             self.listWidget.addItem(i)
-            self.label.setText('Total ' + str(self.listWidget.count()) + ' Skins')
+            global skin_count
+            skin_count = str(self.listWidget.count())
+            self.label.setText('Total ' + skin_count + ' Skins')
         f.close()
         self.lbl_Version.setText('Version : ' + Version)
         self.lbl_clientlocation.setText('Client Location : ' + client_location)
         self.lbl_serverlocation.setText('Server Location : ' + server_location)
+        if server_location == 'error':
+            self.lbl_serverlocation.setText('')
+            self.btn_openus.setVisible(False)
+            self.btn_manuallist.setVisible(False)
         self.lbl_DLserver.setText('DL Server : ' + DLServer)
 
     def on_item_clicked(self, item):
@@ -297,7 +359,7 @@ class WindowClass(QMainWindow, form_class) :
                 image_data_flag = urlopen(image_flag).read()
                 self.qPixmapWebVar_flag = QPixmap()
                 self.qPixmapWebVar_flag.loadFromData(image_data_flag)
-                self.qPixmapWebVar_flag = self.qPixmapWebVar_flag.scaledToWidth(120)
+                self.qPixmapWebVar_flag = self.qPixmapWebVar_flag.scaledToWidth(60)
                 self.lbl_img_2.setPixmap(self.qPixmapWebVar_flag)
                 self.lbl_img_2.setHidden(False)
         t = threading.Thread(target=load_img_from_web)
@@ -413,6 +475,13 @@ class WindowClass(QMainWindow, form_class) :
             subprocess.run([FILEBROWSER_PATH, path])
         elif os.path.isfile(path):
             subprocess.run([FILEBROWSER_PATH, '/select,', os.path.normpath(path)])'''
+    def change_DLserver(self):
+        path = DataFolder.replace('/', '\\')
+        path = os.path.normpath(path)
+        if os.path.isdir(path):
+            os.startfile(path)
+        self.listWidget.clear()
+        self.load_skin_list()
 if __name__ == "__main__" :
     app = QApplication(sys.argv)
     myWindow = WindowClass()
