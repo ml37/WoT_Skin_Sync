@@ -1,4 +1,3 @@
-from mailbox import linesep
 from PyQt5.QtWidgets import QPushButton, QWidget, QLabel, QApplication, QMainWindow, QFileDialog, QAction
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtCore import Qt
@@ -11,6 +10,7 @@ import shutil
 import zipfile
 import threading
 import re
+import webbrowser
 form_class = uic.loadUiType("SyncTank.ui")[0]
 
 ########################################################
@@ -67,6 +67,7 @@ ZipMaketemp = client_location + '\\SkinTemp' + '\\PySyncTank\\' + '\\ZipMaketemp
 country = {'A':'american', 'GB':'british', 'Ch':'chinese', 'Cz':'czech', 'F':'french', 'G':'german', 'It':'italy', 'J':'japan', 'Pl':'poland', 'R':'russian', 'S':'sweden'}
 country_reverse = {'american':'A', 'british':'GB', 'chinese':'Ch', 'czech':'Cz', 'french':'F', 'german':'G', 'italy':'It', 'japan':'J', 'poland':'Pl', 'russian':'R', 'sweden':'S'}
 countryimg = {'A':'usa', 'GB':'uk', 'Ch':'china', 'Cz':'czech', 'F':'france', 'G':'germany', 'It':'italy', 'J':'japan', 'Pl':'poland', 'R':'ussr', 'S':'sweden'}
+countryimg_reverse = {'usa':'A', 'uk':'GB', 'china':'Ch', 'czech':'Cz', 'france':'F', 'germany':'G', 'italy':'It', 'japan':'J', 'poland':'Pl', 'ussr':'R', 'sweden':'S'}
 ########################################################
 #Find SkinList.inf. If Not Exists, Download Skinlist.inf.
 if os.path.isfile(DataFolder + '\Skinlist.inf') == False:
@@ -153,13 +154,17 @@ class WindowClass(QMainWindow, form_class) :
         self.cb_country.currentIndexChanged.connect(self.country_change)
         self.btn_change_DLserver.clicked.connect(self.change_DLserver)
         self.btn_go.clicked.connect(self.search_list)
+        self.btn_open_tanksgg.clicked.connect(self.open_tanksgg)
         ########################################################
         #setEnabled
         self.btn_open_skin.setEnabled(False)
         self.btn_download.setEnabled(False)
+        self.btn_open_tanksgg.setEnabled(False)
         self.btn_openus.setEnabled(False)
         self.btn_manuallist.setEnabled(False)
         ########################################################
+        #raise
+        self.listWidget.raise_()
         selClientLoc = QAction('Select Game Client Location', self)
         selClientLoc.triggered.connect(self.selClientLocation)
         selServerLoc = QAction('Select Upload Server Location(Option for Server Admin, Not For User!!)', self)
@@ -309,6 +314,7 @@ class WindowClass(QMainWindow, form_class) :
     def on_item_clicked(self, item):
         self.btn_open_skin.setEnabled(True)
         self.btn_download.setEnabled(True)
+        self.btn_open_tanksgg.setEnabled(True)
         self.lbl_img.setHidden(True)
         self.lbl_img_2.setHidden(True)
         text = item.text().split('_')
@@ -350,6 +356,8 @@ class WindowClass(QMainWindow, form_class) :
                 self.qPixmapWebVar = self.qPixmapWebVar.scaledToWidth(320) # 480x300 320x200 360x240 
                 self.lbl_img.setPixmap(self.qPixmapWebVar)
                 self.lbl_img.setHidden(False)
+                #https://sg-wotp.wgcdn.co/static/5.108.1_3fd1b5/wotp_static/img/core/frontend/scss/common/components/icons/img/flags/ussr_small.png
+                #https://sg-wotp.wgcdn.co/dcont/fb/image/r100_su122a.png
         def load_flag_from_web():
                 url_flag = 'http://tanks.gg/img/nations/' + countryimg[vehicle_Countrycode] + '.svg'
                 try:
@@ -372,10 +380,37 @@ class WindowClass(QMainWindow, form_class) :
                 self.qPixmapWebVar_flag = self.qPixmapWebVar_flag.scaledToWidth(60)
                 self.lbl_img_2.setPixmap(self.qPixmapWebVar_flag)
                 self.lbl_img_2.setHidden(False)
-        t = threading.Thread(target=load_img_from_web)
-        t.start()
+        def load_img_from_tankpedia():
+            url = 'https://sg-wotp.wgcdn.co/dcont/fb/image/' + lawname.lower() + '.png'
+            #print(url)
+            try:
+                    image=Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+            except urllib.error.HTTPError as e:
+                    print(e.__dict__)
+                    self.btn_download.setEnabled(False)
+                    self.lbl_error.setText('Error!')
+                    self.lbl_error_2.setText(str(e.reason))
+                    self.lbl_img.setText('Error!')
+            except urllib.error.URLError as e:
+                    print(e.__dict__)
+                    self.btn_download.setEnabled(False)
+                    self.lbl_error.setText('Error!')
+                    self.lbl_error_2.setText(str(e.reason))
+                    self.lbl_img.setText('Error!')
+            image_data = urlopen(image).read()
+            self.qPixmapWebVar = QPixmap()
+            self.qPixmapWebVar.loadFromData(image_data)
+            self.qPixmapWebVar = self.qPixmapWebVar.scaledToWidth(800) # 480x300 320x200 360x240 
+            self.lbl_img.setPixmap(self.qPixmapWebVar)
+            self.lbl_img.lower()
+            self.lbl_img.setHidden(False)   
+
+        '''t = threading.Thread(target=load_img_from_web)
+        t.start()'''
         t1 = threading.Thread(target=load_flag_from_web)
         t1.start()
+        t2 = threading.Thread(target=load_img_from_tankpedia)
+        t2.start()
     def search_list(self):
         if self.search.text() == '':
             print('ERROR! : Searchbar empty')
@@ -512,6 +547,8 @@ class WindowClass(QMainWindow, form_class) :
             subprocess.run([FILEBROWSER_PATH, path])
         elif os.path.isfile(path):
             subprocess.run([FILEBROWSER_PATH, '/select,', os.path.normpath(path)])'''
+    def open_tanksgg(self):
+        webbrowser.open('https://tanks.gg/techtree/' + countryimg[vehicle_Countrycode])
     def change_DLserver(self):
         path = DataFolder.replace('/', '\\')
         path = os.path.normpath(path)
