@@ -305,9 +305,6 @@ class WindowClass(QMainWindow, form_class) :
         t1 = threading.Thread(target=load_flag_from_web)
         t1.start()
     
-        
-    
-        
     def download(self): 
         print('!'*50)
         print(self.listWidget.currentItem().text())
