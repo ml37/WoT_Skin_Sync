@@ -18,8 +18,8 @@
     <property name="geometry">
      <rect>
       <x>60</x>
-      <y>80</y>
-      <width>111</width>
+      <y>60</y>
+      <width>291</width>
       <height>20</height>
      </rect>
     </property>
@@ -91,8 +91,8 @@
    <widget class="QLabel" name="lbl_Version">
     <property name="geometry">
      <rect>
-      <x>60</x>
-      <y>30</y>
+      <x>20</x>
+      <y>440</y>
       <width>341</width>
       <height>16</height>
      </rect>
@@ -105,7 +105,7 @@
     <property name="geometry">
      <rect>
       <x>60</x>
-      <y>60</y>
+      <y>40</y>
       <width>331</width>
       <height>21</height>
      </rect>
@@ -118,7 +118,7 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>60</y>
+      <y>40</y>
       <width>41</width>
       <height>23</height>
      </rect>
@@ -144,7 +144,7 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>0</y>
+      <y>80</y>
       <width>75</width>
       <height>23</height>
      </rect>
@@ -183,7 +183,7 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>80</y>
+      <y>60</y>
       <width>41</width>
       <height>23</height>
      </rect>
@@ -195,8 +195,8 @@
    <widget class="QPushButton" name="btn_cleartemp">
     <property name="geometry">
      <rect>
-      <x>150</x>
-      <y>530</y>
+      <x>70</x>
+      <y>490</y>
       <width>81</width>
       <height>23</height>
      </rect>
@@ -214,21 +214,24 @@
       <height>240</height>
      </rect>
     </property>
+    <property name="frameShape">
+     <enum>QFrame::Box</enum>
+    </property>
     <property name="text">
-     <string>IMG</string>
+     <string/>
     </property>
    </widget>
    <widget class="QLabel" name="lbl_img_2">
     <property name="geometry">
      <rect>
       <x>280</x>
-      <y>170</y>
-      <width>120</width>
-      <height>60</height>
+      <y>80</y>
+      <width>60</width>
+      <height>30</height>
      </rect>
     </property>
     <property name="text">
-     <string>Flag</string>
+     <string/>
     </property>
    </widget>
    <widget class="QLabel" name="lbl_DLserver">
@@ -296,14 +299,97 @@
    <widget class="QPushButton" name="btn_opentemp">
     <property name="geometry">
      <rect>
-      <x>230</x>
-      <y>530</y>
+      <x>150</x>
+      <y>490</y>
       <width>81</width>
       <height>23</height>
      </rect>
     </property>
     <property name="text">
      <string>Open Temp</string>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="cb_country">
+    <property name="geometry">
+     <rect>
+      <x>200</x>
+      <y>80</y>
+      <width>76</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <item>
+     <property name="text">
+      <string>All</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>american</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>british</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>chinese</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>czech</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>french</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>german</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>italy</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>japan</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>poland</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>russian</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>sweden</string>
+     </property>
+    </item>
+   </widget>
+   <widget class="QPushButton" name="btn_change_DLserver">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>490</y>
+      <width>51</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>change</string>
     </property>
    </widget>
   </widget>
