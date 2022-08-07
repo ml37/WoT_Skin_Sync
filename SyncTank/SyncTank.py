@@ -333,6 +333,8 @@ class WindowClass(QMainWindow, form_class) :
                 except urllib.error.HTTPError as e:
                     print(e.__dict__)
                     self.btn_download.setEnabled(False)
+                    self.lbl_error.setText('Error!')
+                    self.lbl_error_2.setText(str(e.reason))
                 except urllib.error.URLError as e:
                     print(e.__dict__)
                     self.btn_download.setEnabled(False)
@@ -341,7 +343,7 @@ class WindowClass(QMainWindow, form_class) :
                 image_data = urlopen(image).read()
                 self.qPixmapWebVar = QPixmap()
                 self.qPixmapWebVar.loadFromData(image_data)
-                self.qPixmapWebVar = self.qPixmapWebVar.scaledToWidth(360) # 480x300 320x200 360x240
+                self.qPixmapWebVar = self.qPixmapWebVar.scaledToWidth(320) # 480x300 320x200 360x240 
                 self.lbl_img.setPixmap(self.qPixmapWebVar)
                 self.lbl_img.setHidden(False)
         def load_flag_from_web():
