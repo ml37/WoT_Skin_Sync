@@ -124,7 +124,7 @@ else:
             if '/res_mods/' in line:
                 '''    <Path cacheSubdirs="true">./res_mods/1.17.1.0</Path>'''
                 Version = line.split('/res_mods/')[1].split('</Path>')[0]
-                print(f'Notice : path is {Version}')
+                print(f'Notice : Version is {Version} by reading paths.xml')
                 break
         r.close()
 
@@ -137,6 +137,7 @@ class WindowClass(QMainWindow, form_class) :
         self.setWindowIcon(QIcon('icon.ico'))
         self.setAcceptDrops(True)
         self.load_skin_list()
+        self.setBaseSize(800, 560)
         ########################################################
         #connect
         self.listWidget.itemClicked.connect(self.on_item_clicked)
@@ -151,6 +152,7 @@ class WindowClass(QMainWindow, form_class) :
         self.btn_opentemp.clicked.connect(self.opentemp)
         self.cb_country.currentIndexChanged.connect(self.country_change)
         self.btn_change_DLserver.clicked.connect(self.change_DLserver)
+        self.btn_go.clicked.connect(self.search_list)
         ########################################################
         #setEnabled
         self.btn_open_skin.setEnabled(False)
@@ -335,11 +337,13 @@ class WindowClass(QMainWindow, form_class) :
                     self.btn_download.setEnabled(False)
                     self.lbl_error.setText('Error!')
                     self.lbl_error_2.setText(str(e.reason))
+                    self.lbl_img.setText('Error!')
                 except urllib.error.URLError as e:
                     print(e.__dict__)
                     self.btn_download.setEnabled(False)
                     self.lbl_error.setText('Error!')
                     self.lbl_error_2.setText(str(e.reason))
+                    self.lbl_img.setText('Error!')
                 image_data = urlopen(image).read()
                 self.qPixmapWebVar = QPixmap()
                 self.qPixmapWebVar.loadFromData(image_data)
@@ -353,11 +357,15 @@ class WindowClass(QMainWindow, form_class) :
                 except urllib.error.HTTPError as e:
                     print(e.__dict__)
                     self.btn_download.setEnabled(False)
+                    self.lbl_error.setText('Error!')
+                    self.lbl_error_2.setText(str(e.reason))
+                    self.lbl_img.setText('Error!')
                 except urllib.error.URLError as e:
                     print(e.__dict__)
                     self.btn_download.setEnabled(False)
                     self.lbl_error.setText('Error!')
                     self.lbl_error_2.setText(str(e.reason))
+                    self.lbl_img.setText('Error!')
                 image_data_flag = urlopen(image_flag).read()
                 self.qPixmapWebVar_flag = QPixmap()
                 self.qPixmapWebVar_flag.loadFromData(image_data_flag)
@@ -368,7 +376,34 @@ class WindowClass(QMainWindow, form_class) :
         t.start()
         t1 = threading.Thread(target=load_flag_from_web)
         t1.start()
-    
+    def search_list(self):
+        if self.search.text() == '':
+            print('ERROR! : Searchbar empty')
+        elif self.search.text() == ' ':
+            print('ERROR! : Searchbar empty')
+        else:
+            self.country_change()
+            out = self.listWidget.findItems(self.search.text(), Qt.MatchContains)
+            if out == []:
+                '''self.lbl_error.setText('Error!')
+                self.lbl_error_2.setText('No Skin Found')'''
+                self.label.setText('Total ' + skin_count + ' Skins, ' + 'Not Found')
+            else:
+                
+                '''self.listWidget.clear()
+                print('@')
+                print(out)'''
+                result = []
+                for i in out:
+                    #print(i.text())
+                    result.append(i.text())
+                self.listWidget.clear()
+                for i in result:
+                    self.listWidget.addItem(i)
+                #print(result)
+                #print(str(self.listWidget.count()))
+                self.label.setText('Total ' + skin_count + ' Skins, ' + str(self.listWidget.count()) + ' Found')
+
     def download(self): 
         print('!'*50)
         print(self.listWidget.currentItem().text())
