@@ -18,7 +18,7 @@
     <property name="geometry">
      <rect>
       <x>60</x>
-      <y>20</y>
+      <y>50</y>
       <width>291</width>
       <height>20</height>
      </rect>
@@ -105,7 +105,7 @@
     <property name="geometry">
      <rect>
       <x>60</x>
-      <y>0</y>
+      <y>30</y>
       <width>331</width>
       <height>21</height>
      </rect>
@@ -118,9 +118,9 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>0</y>
+      <y>30</y>
       <width>41</width>
-      <height>23</height>
+      <height>21</height>
      </rect>
     </property>
     <property name="text">
@@ -143,14 +143,14 @@
    <widget class="QPushButton" name="btn_reload">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>40</y>
-      <width>75</width>
-      <height>23</height>
+      <x>224</x>
+      <y>70</y>
+      <width>51</width>
+      <height>25</height>
      </rect>
     </property>
     <property name="text">
-     <string>Reload list</string>
+     <string>Reload</string>
     </property>
    </widget>
    <widget class="QPushButton" name="btn_openus">
@@ -183,13 +183,13 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>20</y>
+      <y>50</y>
       <width>41</width>
-      <height>23</height>
+      <height>21</height>
      </rect>
     </property>
     <property name="text">
-     <string>All</string>
+     <string>DL All</string>
     </property>
    </widget>
    <widget class="QPushButton" name="btn_cleartemp">
@@ -402,23 +402,16 @@
     <property name="geometry">
      <rect>
       <x>100</x>
-      <y>71</y>
-      <width>141</width>
+      <y>70</y>
+      <width>121</width>
       <height>21</height>
      </rect>
     </property>
-   </widget>
-   <widget class="QPushButton" name="btn_go">
-    <property name="geometry">
-     <rect>
-      <x>240</x>
-      <y>70</y>
-      <width>31</width>
-      <height>23</height>
-     </rect>
-    </property>
     <property name="text">
-     <string>GO</string>
+     <string/>
+    </property>
+    <property name="placeholderText">
+     <string>Search...</string>
     </property>
    </widget>
    <widget class="QPushButton" name="btn_open_tanksgg">
@@ -431,7 +424,40 @@
      </rect>
     </property>
     <property name="text">
-     <string>Tanks.gg</string>
+     <string>TechTree</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lbl_img_error">
+    <property name="geometry">
+     <rect>
+      <x>280</x>
+      <y>190</y>
+      <width>341</width>
+      <height>191</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>40</pointsize>
+     </font>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::NoFrame</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Sunken</enum>
+    </property>
+    <property name="text">
+     <string>ERROR</string>
+    </property>
+    <property name="textInteractionFlags">
+     <set>Qt::NoTextInteraction</set>
     </property>
    </widget>
   </widget>
