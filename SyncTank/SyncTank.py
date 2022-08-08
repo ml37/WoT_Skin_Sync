@@ -76,9 +76,9 @@ if os.path.isfile(DataFolder + '\Skinlist.inf') == False:
     try:
         urllib.request.urlretrieve(DLSkinlist, DataFolder + '/Skinlist.inf')
     except urllib.error.HTTPError as e:
-        print(f'ERROR! : Download Skinlist.inf from {DLSkinlist}. Error code {e.__dict__}')
+        print(f'ERROR! : Download Skinlist.inf from {DLSkinlist}. Error code {e.code} / {e.reason} - {e.__dict__}')
     except urllib.error.URLError as e:
-        print(f'ERROR! : Download Skinlist.inf from {DLSkinlist}. Error code {e.__dict__}')
+        print(f'ERROR! : Download Skinlist.inf from {DLSkinlist}. Error code {e.code} / {e.reason} - {e.__dict__}')
 ########################################################
 #Critical Error
 if client_location == 'error':
@@ -102,9 +102,9 @@ else:
             try:
                 urllib.request.urlretrieve(DLVersion, DataFolder + '/Version.inf')
             except urllib.error.HTTPError as e:
-                print(f'ERROR! : Download Version.inf from {DLVersion}. Error code {e.__dict__}')
+                print(f'ERROR! : Download Version.inf from {DLVersion}. Error code {e.code} / {e.reason} - {e.__dict__}')
             except urllib.error.URLError as e:
-                print(f'ERROR! : Download Version.inf from {DLVersion}. Error code {e.__dict__}')
+                print(f'ERROR! : Download Version.inf from {DLVersion}. Error code {e.code} / {e.reason} - {e.__dict__}')
         ########################################################
         #Version.inf is read and stored in version.
         Version = 'error' 
@@ -259,10 +259,10 @@ class WindowClass(QMainWindow, form_class) :
                 try:
                     image_flag = Request(url_flag, headers={'User-Agent': 'Mozilla/5.0'})
                 except urllib.error.HTTPError as e:
-                    print(f'ERROR! : Download National Flag from {url_flag}. Error code {e.__dict__}')
+                    print(f'ERROR! : Download National Flag from {url_flag}. Error code {e.code} / {e.reason} - {e.__dict__}')
                     self.btn_download.setEnabled(False)
                 except urllib.error.URLError as e:
-                    print(f'ERROR! : Download National Flag from {url_flag}. Error code {e.__dict__}')
+                    print(f'ERROR! : Download National Flag from {url_flag}. Error code {e.code} / {e.reason} - {e.__dict__}')
                     self.btn_download.setEnabled(False)
                     self.lbl_error.setText('Error!')
                     self.lbl_error_2.setText(str(e.reason))
@@ -280,12 +280,12 @@ class WindowClass(QMainWindow, form_class) :
             try:
                 urllib.request.urlretrieve(DLSkinlist, DataFolder + '/Skinlist.inf')
             except urllib.error.HTTPError as e:
-                print(f'ERROR! : Download Skinlist.inf from {DLSkinlist}. Error code {e.__dict__}')
+                print(f'ERROR! : Download Skinlist.inf from {DLSkinlist}. Error code {e.code} / {e.reason} - {e.__dict__}')
                 self.btn_download.setEnabled(False)
                 self.lbl_error.setText('Error!')
                 self.lbl_error_2.setText(str(e.reason))
             except urllib.error.URLError as e:
-                print(f'ERROR! : Download Skinlist.inf from {DLSkinlist}. Error code {e.__dict__}')
+                print(f'ERROR! : Download Skinlist.inf from {DLSkinlist}. Error code {e.code} / {e.reason} - {e.__dict__}')
                 self.btn_download.setEnabled(False)
                 self.lbl_error.setText('Error!')
                 self.lbl_error_2.setText(str(e.reason))
@@ -309,12 +309,12 @@ class WindowClass(QMainWindow, form_class) :
         try:
             urllib.request.urlretrieve(DLSkinlist, DataFolder + '/Skinlist.inf')
         except urllib.error.HTTPError as e:
-            print(f'ERROR! : Download Skinlist.inf from {DLSkinlist}. Error code {e.__dict__}')
+            print(f'ERROR! : Download Skinlist.inf from {DLSkinlist}. Error code {e.code} / {e.reason} - {e.__dict__}')
             self.btn_download.setEnabled(False)
             self.lbl_error.setText('Error!')
             self.lbl_error_2.setText(str(e.reason))
         except urllib.error.URLError as e:
-            print(f'ERROR! : Download Skinlist.inf from {DLSkinlist}. Error code {e.__dict__}')
+            print(f'ERROR! : Download Skinlist.inf from {DLSkinlist}. Error code {e.code} / {e.reason} - {e.__dict__}')
             self.btn_download.setEnabled(False)
             self.lbl_error.setText('Error!')
             self.lbl_error_2.setText(str(e.reason))
@@ -375,13 +375,13 @@ class WindowClass(QMainWindow, form_class) :
                 try:
                     image=Request(url, headers={'User-Agent': 'Mozilla/5.0'})
                 except urllib.error.HTTPError as e:
-                    print(f'ERROR! : Download Tank IMG from {url}. Error code {e.__dict__}')
+                    print(f'ERROR! : Download Tank IMG from {url}. Error code {e.code} / {e.reason} - {e.__dict__}')
                     self.btn_download.setEnabled(False)
                     self.lbl_error.setText('Error!')
                     self.lbl_error_2.setText(str(e.reason))
                     self.lbl_img.setText('Error!')
                 except urllib.error.URLError as e:
-                    print(f'ERROR! : Download Tank IMG from {url}. Error code {e.__dict__}')
+                    print(f'ERROR! : Download Tank IMG from {url}. Error code {e.code} / {e.reason} - {e.__dict__}')
                     self.btn_download.setEnabled(False)
                     self.lbl_error.setText('Error!')
                     self.lbl_error_2.setText(str(e.reason))
@@ -399,13 +399,13 @@ class WindowClass(QMainWindow, form_class) :
                 try:
                     image_flag = Request(url_flag, headers={'User-Agent': 'Mozilla/5.0'})
                 except urllib.error.HTTPError as e:
-                    print(f'ERROR! : Download National Flag from {url_flag}. Error code {e.__dict__}')
+                    print(f'ERROR! : Download National Flag from {url_flag}. Error code {e.code} / {e.reason} - {e.__dict__}')
                     self.btn_download.setEnabled(False)
                     self.lbl_error.setText('Error!')
                     self.lbl_error_2.setText(str(e.reason))
                     self.lbl_img.setText('Error!')
                 except urllib.error.URLError as e:
-                    print(f'ERROR! : Download National Flag from {url_flag}. Error code {e.__dict__}')
+                    print(f'ERROR! : Download National Flag from {url_flag}. Error code {e.code} / {e.reason} - {e.__dict__}')
                     self.btn_download.setEnabled(False)
                     self.lbl_error.setText('Error!')
                     self.lbl_error_2.setText(str(e.reason))
@@ -422,13 +422,13 @@ class WindowClass(QMainWindow, form_class) :
             try:
                     image=Request(url, headers={'User-Agent': 'Mozilla/5.0'})
             except urllib.error.HTTPError as e:
-                    print(f'ERROR! : Download National Flag from {url}. Error code {e.__dict__}')
+                    print(f'ERROR! : Download National Flag from {url}. Error code {e.code} / {e.reason} - {e.__dict__}')
                     self.btn_download.setEnabled(False)
                     self.lbl_error.setText('Error!')
                     self.lbl_error_2.setText(str(e.reason))
                     self.lbl_img.setText('Error!')
             except urllib.error.URLError as e:
-                    print(f'ERROR! : Download National Flag from {url}. Error code {e.__dict__}')
+                    print(f'ERROR! : Download National Flag from {url}. Error code {e.code} / {e.reason} - {e.__dict__}')
                     self.btn_download.setEnabled(False)
                     self.lbl_error.setText('Error!')
                     self.lbl_error_2.setText(str(e.reason))
@@ -487,10 +487,10 @@ class WindowClass(QMainWindow, form_class) :
             try:
                 urllib.request.urlretrieve(downloadURL, lawname + '.zip')
             except urllib.error.HTTPError as e:
-                print(f'ERROR! : Download Tank Skin zip from {downloadURL}. Error code {e.__dict__}')
+                print(f'ERROR! : Download Tank Skin zip from {downloadURL}. Error code {e.code} / {e.reason} - {e.__dict__}')
                 self.btn_download.setEnabled(False)
             except urllib.error.URLError as e:
-                print(f'ERROR! : Download Tank Skin zip from {downloadURL}. Error code {e.__dict__}')
+                print(f'ERROR! : Download Tank Skin zip from {downloadURL}. Error code {e.code} / {e.reason} - {e.__dict__}')
                 self.btn_download.setEnabled(False)
                 self.lbl_error.setText('Error!')
                 self.lbl_error_2.setText(str(e.reason))
