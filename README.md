@@ -11,7 +11,7 @@ Client side - First Start, Program will make some files on c:\SyncTank. edit "DL
 Server side - must have some files. 
 ```(root)─WoTskin─PySkin┬Skinlist.inf
 
-                     ├```
+                     ├ ```
 ---
 
 2. SyncTankZipMaker is for user who want to make server, Drag and Drop your skin on SkinFileMake - DragAndDrop.bat and you can get zip file ex)G89_Leopard1 -> G89.zip
