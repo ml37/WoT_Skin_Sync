@@ -1,27 +1,17 @@
-# World Of Tank Skin Sync Tool 「SyncTank」
+「SyncTank」
+=======================
 
 # what is「SyncTank」?
 SyncTank is World Of Tank automatic Skin Downloader
 
-# why u make it?
-Just fun and little convenient :)
+## For anyone who want to use this tool
 
-# Why use This sh1t?
-*This is for Me and My friend.* 
+1. You have to edit code.
+Client side - First Start, Program will make some files on c:\SyncTank. edit "DLserver.inf" (e.g : mashiroDL.i234.me)
+Server side - must have some files. 
+```(root)─WoTskin─PySkin┬Skinlist.inf
 
-Cuz When I install mod with Aslain, My skin(most of them download form H-skin factroy https://ppazzz.tistory.com) deleted and I have to reinstall. 
-And When I make skin, I have to upload it on Google drive and make share link
-
-It`s really $uck! 
-
-
-# For anyone who want to use this tool
-
-1. You have to edit some code.
-
-WoTskin.bat\ set ServerAddress=mashiro37.i234.me <- this is my server address.
-ClientLocation.inf\ Set Your Client Location ex)E:\game\World_of_Tanks_ASIA
-
+                     ├```
 ---
 
 2. SyncTankZipMaker is for user who want to make server, Drag and Drop your skin on SkinFileMake - DragAndDrop.bat and you can get zip file ex)G89_Leopard1 -> G89.zip
