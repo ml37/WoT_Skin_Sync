@@ -2,12 +2,12 @@
 =======================
 
 # what is「SyncTank」?
-SyncTank is World Of Tank automatic Skin Downloader
+SyncTank is World of Tanks Skin Synchronize Tool
 
 ## For anyone who want to use this tool
 
 1. You have to edit code.
-Client side - First Start, Program will make some files on c:\SyncTank. 
+Client side - When First Start, Program will make some files on C:\SyncTank. 
 
 C:\SyncTank\DLserver.inf example
 ```
