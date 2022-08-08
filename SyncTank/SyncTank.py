@@ -18,12 +18,12 @@ DataFolder = 'c:\SyncTank'
 ########################################################
 #Find Data folder. If not found, create it.
 if os.path.isdir(DataFolder) == False:
-    print('Data folder not found. Creating it.')
+    print('ERROR! : Data folder not found. Creating it.')
     os.mkdir(DataFolder)
 ########################################################
 #Find Data folder/Zipmaker. If not found, create it. Zipmaker is used to create zip files.
 if os.path.isdir(DataFolder + '\Zipmaker') == False:
-    print('Zipmaker folder not found. Creating it.')
+    print('ERROR! : Zipmaker folder not found. Creating it.')
     os.mkdir(DataFolder + '\Zipmaker')
 ########################################################
 #Find Data folder/DLserver.inf. If not found, create it. DLserver.inf is used to store the server information.
@@ -42,17 +42,18 @@ with open(DataFolder + '\DLserver.inf', 'r') as f:
         DLServer = 'http://' + DLServer
 ########################################################
 #Open ClientLoaction.inf and read the client location.
+global client_location
 if os.path.isfile(DataFolder + '\ClientLocation.inf') == False:
     print(f'ERROR! : {DataFolder}\ClientLocation.inf is not found')
     client_location = 'error'
 else: #If ClientLocation.inf is found, read the location.
     with open(DataFolder + '\ClientLocation.inf', 'r') as f:
         client_location = f.readline()
-        print(f'Notice : client location : {client_location}')
+        print(f'Notice : client location : {client_location} This message print while First phase of program is running.')
 ########################################################
 #Open ServerLocation.inf and read the server location.
 if os.path.isfile(DataFolder + '\Zipmaker' +'\ServerLocation.inf') == False: #If ServerLocation.inf is not found, set server_location to error.
-    print(f'Waring! : {DataFolder}\Zipmaker\ServerLocation.inf is not found. zip auto Upload disable')
+    print(f'Waring : {DataFolder}\Zipmaker\ServerLocation.inf is not found. zip auto Upload will be disabled.')
     server_location = 'error'
 else:
     with open(DataFolder + '\Zipmaker' +'\ServerLocation.inf', 'r') as f: #If ServerLocation.inf is found, read the location.
@@ -78,12 +79,10 @@ if os.path.isfile(DataFolder + '\Skinlist.inf') == False:
         print(f'ERROR! : Download Skinlist.inf from {DLSkinlist}. Error code {e.__dict__}')
     except urllib.error.URLError as e:
         print(f'ERROR! : Download Skinlist.inf from {DLSkinlist}. Error code {e.__dict__}')
-
-
 ########################################################
 #Critical Error
 if client_location == 'error':
-    print('client location is not found') #initialte phaze have a set client location. No need to fix
+    print('ERROR! : client location is not found. This message print while check SkinTemp folder') #initialte phaze have a set client location. No need to fix
 else:
     if os.path.isdir(client_location + '\SkinTemp') == False:   
         os.mkdir(client_location + '\\SkinTemp')
@@ -114,9 +113,9 @@ else:
         else:
             with open(DataFolder + '\Version.inf', 'r') as f:
                 Version = f.readline()
-                print(f'Notice : Version.inf Read! Version is {Version}')
+                print(f'Notice : {DataFolder}\Version.inf Read! Version is {Version}')
             if Version == 'error':
-                print('Version is not found')
+                print(f'ERROR! : {DataFolder}\Version.inf is empty. Please check the file and try again')
             else:
                 if os.path.isdir(client_location + '\\res_mods\\' + Version) == False:
                     os.mkdir(client_location + '\\res_mods\\' + Version)
@@ -136,6 +135,14 @@ else:
 class WindowClass(QMainWindow, form_class) :
     def __init__(self) :
         super().__init__()
+        global client_location
+        if os.path.isfile(DataFolder + '\ClientLocation.inf') == False:
+            print(f'ERROR! : {DataFolder}\ClientLocation.inf is not found')
+            client_location = 'error'
+        else: #If ClientLocation.inf is found, read the location.
+            with open(DataFolder + '\ClientLocation.inf', 'r') as f:
+                client_location = f.readline()
+            print(f'Notice : client location : {client_location}. This message print while WindowClass is initialized')
         self.setupUi(self)
         self.setWindowTitle('SyncTank')
         self.setWindowIcon(QIcon('icon.ico'))
@@ -156,15 +163,22 @@ class WindowClass(QMainWindow, form_class) :
         self.btn_opentemp.clicked.connect(self.opentemp)
         self.cb_country.currentIndexChanged.connect(self.country_change)
         self.btn_change_DLserver.clicked.connect(self.change_DLserver)
-        self.btn_go.clicked.connect(self.search_list)
+        self.search.returnPressed.connect(self.search_list)
+        self.search.textChanged.connect(self.search_list)
         self.btn_open_tanksgg.clicked.connect(self.open_tanksgg)
         ########################################################
         #setEnabled
         self.btn_open_skin.setEnabled(False)
+        self.btn_open_skin.setVisible(False)
         self.btn_download.setEnabled(False)
+        self.btn_download.setVisible(False)
         self.btn_open_tanksgg.setEnabled(False)
+        self.btn_open_tanksgg.setVisible(False)
         self.btn_openus.setEnabled(False)
         self.btn_manuallist.setEnabled(False)
+        ########################################################
+        self.lbl_img_error.setText('')
+        self.lbl_img_error.lower()
         ########################################################
         #raise
         self.listWidget.raise_()
@@ -186,19 +200,21 @@ class WindowClass(QMainWindow, form_class) :
         if client_location == 'error':
             fname = QFileDialog.getExistingDirectory(self, 'Select Game Client(World_of_Tanks_ASIA) Location', './')
             if fname:
-                print(fname)
+                print(f'Notice : Selected Client Location is {fname}')
                 f = open(DataFolder + '\ClientLocation.inf', 'w')
                 f.write(fname)
                 f.close()
+                client_location = fname
+                print(f'Notice : Client Location is {client_location}. This message print while user select the client location')
         if server_location == 'error':
-            print('auto upload disabled')
+            print('Notice : zip auto upload disabled. This message print while first load')
         else:
             self.btn_openus.setEnabled(True)
             self.btn_manuallist.setEnabled(True)
     def selClientLocation(self):
         fname = QFileDialog.getExistingDirectory(self, 'Select Game Client(World_of_Tanks_ASIA) Location', './')
         if fname:
-            print(fname)
+            print(f'Notice : Selected Client Location is {fname}')
             f = open(DataFolder + '\ClientLocation.inf', 'w')
             f.write(fname)
             f.close()
@@ -206,7 +222,7 @@ class WindowClass(QMainWindow, form_class) :
     def selServerLocation(self):
             fname = QFileDialog.getExistingDirectory(self, 'Select Upload Server(PySkins) Location', './')
             if fname:
-                print(fname)
+                print(f'Notice : Selected Server Location is {fname}')
                 f = open(DataFolder + '\Zipmaker' +'\ServerLocation.inf', 'w')
                 f.write(fname)
                 f.close()
@@ -223,15 +239,16 @@ class WindowClass(QMainWindow, form_class) :
             f.write(file + '\n')
         f.close()
     def cleartemp(self):
-        print('cleartemp')
         if os.path.isdir(client_location + '\\SkinTemp' + '\\PySyncTank' + '\\DLtemp') == True:
             shutil.rmtree(client_location + '\\SkinTemp' + '\\PySyncTank' + '\\DLtemp')
             os.mkdir(client_location + '\\SkinTemp\\PySyncTank\\DLtemp')
+            print('Notice : Temp folder DLtemp is cleared')
         if os.path.isdir(client_location + '\\SkinTemp' + '\\PySyncTank' + '\\Unziptemp') == True:
             shutil.rmtree(client_location + '\\SkinTemp' + '\\PySyncTank' + '\\Unziptemp')
             os.mkdir(client_location + '\\SkinTemp\\PySyncTank\\Unziptemp')
+            print('Notice : Temp folder Unziptemp is cleared')
+        
     def opentemp(self):
-        print('opentemp')
         if os.path.isdir(client_location + '\\SkinTemp' + '\\PySyncTank' + '\\DLtemp') == True:
             os.startfile(client_location + '\\SkinTemp' + '\\PySyncTank' + '\\DLtemp')
         if os.path.isdir(client_location + '\\SkinTemp' + '\\PySyncTank' + '\\Unziptemp') == True:
@@ -258,7 +275,7 @@ class WindowClass(QMainWindow, form_class) :
         if self.cb_country.currentText() == 'All':
             self.load_skin_list()
         else:
-            print(f'country_change {self.cb_country.currentText()}')
+            #print(f'country_change {self.cb_country.currentText()}')
             self.listWidget.clear()
             try:
                 urllib.request.urlretrieve(DLSkinlist, DataFolder + '/Skinlist.inf')
@@ -322,12 +339,18 @@ class WindowClass(QMainWindow, form_class) :
                 self.lbl_serverlocation.setText('')
                 self.btn_openus.setVisible(False)
                 self.btn_manuallist.setVisible(False)
+            else:
+                self.btn_openus.setVisible(True)
+                self.btn_manuallist.setVisible(True)
             self.lbl_DLserver.setText('DL Server : ' + DLServer)
 
     def on_item_clicked(self, item):
         self.btn_open_skin.setEnabled(True)
+        self.btn_open_skin.setVisible(True)
         self.btn_download.setEnabled(True)
+        self.btn_download.setVisible(True)
         self.btn_open_tanksgg.setEnabled(True)
+        self.btn_open_tanksgg.setVisible(True)
         self.lbl_img.setHidden(True)
         self.lbl_img_2.setHidden(True)
         text = item.text().split('_')
@@ -410,13 +433,18 @@ class WindowClass(QMainWindow, form_class) :
                     self.lbl_error.setText('Error!')
                     self.lbl_error_2.setText(str(e.reason))
                     self.lbl_img.setText('Error!')
-            image_data = urlopen(image).read()
-            self.qPixmapWebVar = QPixmap()
-            self.qPixmapWebVar.loadFromData(image_data)
-            self.qPixmapWebVar = self.qPixmapWebVar.scaledToWidth(800) # 480x300 320x200 360x240 
-            self.lbl_img.setPixmap(self.qPixmapWebVar)
-            self.lbl_img.lower()
-            self.lbl_img.setHidden(False)   
+            try:
+                image_data = urlopen(image).read()
+                self.qPixmapWebVar = QPixmap()
+                self.qPixmapWebVar.loadFromData(image_data)
+                self.qPixmapWebVar = self.qPixmapWebVar.scaledToWidth(800) # 480x300 320x200 360x240 
+                self.lbl_img.setPixmap(self.qPixmapWebVar)
+                self.lbl_img.lower()
+                self.lbl_img.setHidden(False)   
+            except urllib.error.HTTPError as e:
+                print(f'ERROR! : Download Tank IMG from {url}. Error code {e.code} / {e.reason}')
+                self.lbl_img.setText('Error!')
+                self.lbl_img_error.setText(f'{e.code} \n {e.reason}')
 
         '''t = threading.Thread(target=load_img_from_web)
         t.start()'''
@@ -425,22 +453,18 @@ class WindowClass(QMainWindow, form_class) :
         t2 = threading.Thread(target=load_img_from_tankpedia)
         t2.start()
     def search_list(self):
+        p = re.compile(' * ')
         if self.search.text() == '':
-            print('ERROR! : Searchbar empty')
-        elif self.search.text() == ' ':
-            print('ERROR! : Searchbar empty')
+            print('Empty')
+            self.label.setText('Total ' + skin_count + ' Skins')
         else:
+            print('Not Empty')
             self.country_change()
             out = self.listWidget.findItems(self.search.text(), Qt.MatchContains)
             if out == []:
-                '''self.lbl_error.setText('Error!')
-                self.lbl_error_2.setText('No Skin Found')'''
                 self.label.setText('Total ' + skin_count + ' Skins, ' + 'Not Found')
+                self.listWidget.clear()
             else:
-                
-                '''self.listWidget.clear()
-                print('@')
-                print(out)'''
                 result = []
                 for i in out:
                     #print(i.text())
@@ -454,11 +478,11 @@ class WindowClass(QMainWindow, form_class) :
 
     def download(self): 
         print('!'*50)
-        print(self.listWidget.currentItem().text())
+        print(f'Notice : Download target : {self.listWidget.currentItem().text()}')
         downloadURL = DLServer + '/WoTskin/' + 'PySkin/' + lawname + '.zip'
-        print(downloadURL)
+        print(f'Notice : Download URL : {downloadURL}')
         if os.path.exists(DLtemp + lawname + '.zip'):
-            print('File Exists')
+            print(f'ERROR! : {DLtemp}{lawname}.zip File Already Exists. Download will be skipped.')
         else:
             try:
                 urllib.request.urlretrieve(downloadURL, lawname + '.zip')
@@ -476,11 +500,11 @@ class WindowClass(QMainWindow, form_class) :
         zipzip.close()
         print('!'*50)
         if os.path.exists(client_location + '/res_mods/' + Version + '/vehicles/' + vehicle_country):
-            print('File Exists')
+            print(f'ERROR! : {vehicle_country} Folder Already Exists')
         else:
             os.mkdir(client_location + '/res_mods/' + Version + '/vehicles/' + vehicle_country)
         if os.path.exists(client_location + '/res_mods/' + Version + '/vehicles/' + vehicle_country + '/' + lawname):
-            print('File Exists')
+            print(f'ERROR! : {vehicle_country}\{lawname} Folder Already Exists')
         else:
             shutil.copytree(Unziptemp + lawname, client_location + '/res_mods/' + Version + '/vehicles/' + vehicle_country + '/' + lawname)
     def all(self):
@@ -489,10 +513,13 @@ class WindowClass(QMainWindow, form_class) :
             self.on_item_clicked(self.listWidget.item(i))
             self.download()
     def dragEnterEvent(self, event):
-        if event.mimeData().hasUrls():
-            event.accept()
+        if server_location == 'error':
+            print('ERROR! : Server Location is not set. Please set it in Settings.')
         else:
-            event.ignore()
+            if event.mimeData().hasUrls:
+                event.accept()
+            else:
+                event.ignore()
     def dropEvent(self, event):
         files = [u.toLocalFile() for u in event.mimeData().urls()]
         print('$'*50)
@@ -505,7 +532,7 @@ class WindowClass(QMainWindow, form_class) :
             print(name)
             print(f)
             if server_location == 'error':
-                print('Notice : zip auto upload disabled')
+                print('Notice : zip auto upload disabled. This message print while make zip with drag and drop process')
             else:
                 if os.path.exists(server_location + '/' + name + '.zip') == True:
                     print(f'Upload Error File Exists {name}')
@@ -519,11 +546,9 @@ class WindowClass(QMainWindow, form_class) :
                                 zipmake.write(os.path.join(folder, file), os.path.relpath(os.path.join(folder,file), f), compress_type = zipfile.ZIP_DEFLATED)
                     zipmake.close()
                     shutil.move(f + '.zip', server_location)
-                    print(name + '.zip' + ' uploaded')
+                    print(f'Notice : {name}.zip uploaded')
                     with open(server_location + '/Skinlist.inf', 'a') as f:
                         f.write(name + '\n')
-            
-            
         print('$'*50)
         self.load_skin_list()
     def open_skin(self):
@@ -531,35 +556,25 @@ class WindowClass(QMainWindow, form_class) :
             if os.path.isdir(client_location + '/res_mods/' + Version + '/vehicles/' + vehicle_country + '/' + lawname) == True:
                 os.startfile(client_location + '/res_mods/' + Version + '/vehicles/' + vehicle_country + '/' + lawname)
             else:
-                print('Folder not found')
+                print(f'ERROR! : {vehicle_country}\{lawname} Folder not found')
         else:
-            print('Folder not found')
-        '''path = client_location + '/res_mods/' + Version + '/vehicles/' + vehicle_country + '/' + self.listWidget.currentItem().text().replace('/', '\\')
-        path = os.path.normpath(path)'''
-        '''if os.path.isdir(path):
-            subprocess.run([FILEBROWSER_PATH, path])
-        elif os.path.isfile(path):
-            subprocess.run([FILEBROWSER_PATH, '/select,', os.path.normpath(path)])'''
+            print(f'ERROR! : {vehicle_country} Folder not found')
     def opencl(self):
             # explorer would choke on forward slashes
         path = client_location.replace('/', '\\')
         path = os.path.normpath(path)
         if os.path.isdir(path):
             os.startfile(path)
-        '''if os.path.isdir(path):
-            subprocess.run([FILEBROWSER_PATH, path])
-        elif os.path.isfile(path):
-            subprocess.run([FILEBROWSER_PATH, '/select,', os.path.normpath(path)])'''
+        else:
+            print(f'ERROR! : {client_location} Folder not found')
     def openus(self):
             # explorer would choke on forward slashes
         path = server_location.replace('/', '\\')
         path = os.path.normpath(path)
         if os.path.isdir(path):
             os.startfile(path)
-        '''if os.path.isdir(path):
-            subprocess.run([FILEBROWSER_PATH, path])
-        elif os.path.isfile(path):
-            subprocess.run([FILEBROWSER_PATH, '/select,', os.path.normpath(path)])'''
+        else:
+            print(f'ERROR! : {server_location} Folder not found')
     def open_tanksgg(self):
         webbrowser.open('https://tanks.gg/techtree/' + countryimg[vehicle_Countrycode])
     def change_DLserver(self):
@@ -567,6 +582,8 @@ class WindowClass(QMainWindow, form_class) :
         path = os.path.normpath(path)
         if os.path.isdir(path):
             os.startfile(path)
+        else:
+            print(f'ERROR! : {DataFolder} Folder not found')
         self.listWidget.clear()
         self.load_skin_list()
 if __name__ == "__main__" :
