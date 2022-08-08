@@ -9,9 +9,13 @@ SyncTank is World Of Tank automatic Skin Downloader
 1. You have to edit code.
 Client side - First Start, Program will make some files on c:\SyncTank. edit "DLserver.inf" (e.g : mashiroDL.i234.me)
 Server side - must have some files. 
-```(root)─WoTskin─PySkin┬Skinlist.inf
 
-                     ├ 
+```
+
+(root)─WoTskin┬──PySkin─────┬─────Skinlist.inf
+              │             ├─────A11_T29.zip
+              └Version.inf  │
+                            └─────G89_Leopard1.zip
 ```
 ---
 
