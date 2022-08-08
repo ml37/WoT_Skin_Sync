@@ -52,7 +52,7 @@ else: #If ClientLocation.inf is found, read the location.
 ########################################################
 #Open ServerLocation.inf and read the server location.
 if os.path.isfile(DataFolder + '\Zipmaker' +'\ServerLocation.inf') == False: #If ServerLocation.inf is not found, set server_location to error.
-    print(f'ERROR! : {DataFolder}\Zipmaker\ServerLocation.inf is not found')
+    print(f'Waring! : {DataFolder}\Zipmaker\ServerLocation.inf is not found. zip auto Upload disable')
     server_location = 'error'
 else:
     with open(DataFolder + '\Zipmaker' +'\ServerLocation.inf', 'r') as f: #If ServerLocation.inf is found, read the location.
@@ -71,13 +71,13 @@ countryimg_reverse = {'usa':'A', 'uk':'GB', 'china':'Ch', 'czech':'Cz', 'france'
 ########################################################
 #Find SkinList.inf. If Not Exists, Download Skinlist.inf.
 if os.path.isfile(DataFolder + '\Skinlist.inf') == False:
-    print('c:\SyncTank\Skinlist.inf is not found')
+    print(f'ERROR! : {DataFolder}\Skinlist.inf is not found. Try Download')
     try:
         urllib.request.urlretrieve(DLSkinlist, DataFolder + '/Skinlist.inf')
     except urllib.error.HTTPError as e:
-        print(e.__dict__)
+        print(f'ERROR! : Download Skinlist.inf from {DLSkinlist}. Error code {e.__dict__}')
     except urllib.error.URLError as e:
-        print(e.__dict__)
+        print(f'ERROR! : Download Skinlist.inf from {DLSkinlist}. Error code {e.__dict__}')
 
 
 ########################################################
@@ -95,30 +95,33 @@ else:
         os.mkdir(client_location + '\\SkinTemp\\PySyncTank\\Unziptemp')
     Version = 'error'
     if os.path.isfile(client_location + '\\paths.xml') == False:
-        print('Auto Version Detecte Failed')
+        print(f'ERROR! : Auto Version Detect from {client_location} paths.xml Failed')
         ########################################################
         #Find Version.inf. If not found, create it. Version.inf is used to store the version information.
         if os.path.isfile(DataFolder + '\Version.inf') == False:
-            print('c:\SyncTank\Version.inf is not found')
+            print(f'ERROR! : {DataFolder}\Version.inf NOT FOUND. Trying Download from {DLSkinlist}')
             try:
                 urllib.request.urlretrieve(DLVersion, DataFolder + '/Version.inf')
             except urllib.error.HTTPError as e:
-                print(e.__dict__)
+                print(f'ERROR! : Download Version.inf from {DLVersion}. Error code {e.__dict__}')
             except urllib.error.URLError as e:
-                print(e.__dict__)
+                print(f'ERROR! : Download Version.inf from {DLVersion}. Error code {e.__dict__}')
         ########################################################
         #Version.inf is read and stored in version.
         Version = 'error' 
-        with open(DataFolder + '\Version.inf', 'r') as f:
-            Version = f.readline()
-            print(f'Notice : Version.inf Read! Version is {Version}')
-        if Version == 'error':
-            print('Version is not found')
+        if os.path.isfile(DataFolder + '\Version.inf') == False:
+            print('ERROR! : Version.inf NOT FOUND')
         else:
-            if os.path.isdir(client_location + '\\res_mods\\' + Version) == False:
-                os.mkdir(client_location + '\\res_mods\\' + Version)
-            if os.path.isdir(client_location + '\\res_mods\\' + Version + '\\vehicles') == False:
-                os.mkdir(client_location + '\\res_mods\\' + Version + '\\vehicles')
+            with open(DataFolder + '\Version.inf', 'r') as f:
+                Version = f.readline()
+                print(f'Notice : Version.inf Read! Version is {Version}')
+            if Version == 'error':
+                print('Version is not found')
+            else:
+                if os.path.isdir(client_location + '\\res_mods\\' + Version) == False:
+                    os.mkdir(client_location + '\\res_mods\\' + Version)
+                if os.path.isdir(client_location + '\\res_mods\\' + Version + '\\vehicles') == False:
+                    os.mkdir(client_location + '\\res_mods\\' + Version + '\\vehicles')
     else:
         r = open(client_location + '\\paths.xml', 'r')
         for line in r:
@@ -165,6 +168,11 @@ class WindowClass(QMainWindow, form_class) :
         ########################################################
         #raise
         self.listWidget.raise_()
+        ########################################################
+        self.lbl_serverlocation.setText('')
+        self.btn_openus.setVisible(False)
+        self.btn_manuallist.setVisible(False)
+        #######################################################
         selClientLoc = QAction('Select Game Client Location', self)
         selClientLoc.triggered.connect(self.selClientLocation)
         selServerLoc = QAction('Select Upload Server Location(Option for Server Admin, Not For User!!)', self)
@@ -189,11 +197,12 @@ class WindowClass(QMainWindow, form_class) :
             self.btn_manuallist.setEnabled(True)
     def selClientLocation(self):
         fname = QFileDialog.getExistingDirectory(self, 'Select Game Client(World_of_Tanks_ASIA) Location', './')
-        if fname[0]:
-            f = open(fname[0], 'r')
-            with f:
-                data = f.read()
-                print(data)
+        if fname:
+            print(fname)
+            f = open(DataFolder + '\ClientLocation.inf', 'w')
+            f.write(fname)
+            f.close()
+            
     def selServerLocation(self):
             fname = QFileDialog.getExistingDirectory(self, 'Select Upload Server(PySkins) Location', './')
             if fname:
@@ -233,10 +242,10 @@ class WindowClass(QMainWindow, form_class) :
                 try:
                     image_flag = Request(url_flag, headers={'User-Agent': 'Mozilla/5.0'})
                 except urllib.error.HTTPError as e:
-                    print(e.__dict__)
+                    print(f'ERROR! : Download National Flag from {url_flag}. Error code {e.__dict__}')
                     self.btn_download.setEnabled(False)
                 except urllib.error.URLError as e:
-                    print(e.__dict__)
+                    print(f'ERROR! : Download National Flag from {url_flag}. Error code {e.__dict__}')
                     self.btn_download.setEnabled(False)
                     self.lbl_error.setText('Error!')
                     self.lbl_error_2.setText(str(e.reason))
@@ -254,12 +263,12 @@ class WindowClass(QMainWindow, form_class) :
             try:
                 urllib.request.urlretrieve(DLSkinlist, DataFolder + '/Skinlist.inf')
             except urllib.error.HTTPError as e:
-                print(e.__dict__)
+                print(f'ERROR! : Download Skinlist.inf from {DLSkinlist}. Error code {e.__dict__}')
                 self.btn_download.setEnabled(False)
                 self.lbl_error.setText('Error!')
                 self.lbl_error_2.setText(str(e.reason))
             except urllib.error.URLError as e:
-                print(e.__dict__)
+                print(f'ERROR! : Download Skinlist.inf from {DLSkinlist}. Error code {e.__dict__}')
                 self.btn_download.setEnabled(False)
                 self.lbl_error.setText('Error!')
                 self.lbl_error_2.setText(str(e.reason))
@@ -283,33 +292,37 @@ class WindowClass(QMainWindow, form_class) :
         try:
             urllib.request.urlretrieve(DLSkinlist, DataFolder + '/Skinlist.inf')
         except urllib.error.HTTPError as e:
-            print(e.__dict__)
+            print(f'ERROR! : Download Skinlist.inf from {DLSkinlist}. Error code {e.__dict__}')
             self.btn_download.setEnabled(False)
             self.lbl_error.setText('Error!')
             self.lbl_error_2.setText(str(e.reason))
         except urllib.error.URLError as e:
-            print(e.__dict__)
+            print(f'ERROR! : Download Skinlist.inf from {DLSkinlist}. Error code {e.__dict__}')
             self.btn_download.setEnabled(False)
             self.lbl_error.setText('Error!')
             self.lbl_error_2.setText(str(e.reason))
-        f = open(DataFolder + '\Skinlist.inf', 'r')
-        lines = f.readlines()
-        for i in lines[0:]:
-            i = i.strip()
-            text = i.split('_')
-            self.listWidget.addItem(i)
-            global skin_count
-            skin_count = str(self.listWidget.count())
-            self.label.setText('Total ' + skin_count + ' Skins')
-        f.close()
-        self.lbl_Version.setText('Version : ' + Version)
-        self.lbl_clientlocation.setText('Client Location : ' + client_location)
-        self.lbl_serverlocation.setText('Server Location : ' + server_location)
-        if server_location == 'error':
-            self.lbl_serverlocation.setText('')
-            self.btn_openus.setVisible(False)
-            self.btn_manuallist.setVisible(False)
-        self.lbl_DLserver.setText('DL Server : ' + DLServer)
+        if os.path.isfile(DataFolder + '\Skinlist.inf') == False:
+            print('ERROR! : NO skinlist.inf')
+            self.label.setText('ERROR! : skinlist.inf NOT FOUND')
+        else:
+            f = open(DataFolder + '\Skinlist.inf', 'r')
+            lines = f.readlines()
+            for i in lines[0:]:
+                i = i.strip()
+                text = i.split('_')
+                self.listWidget.addItem(i)
+                global skin_count
+                skin_count = str(self.listWidget.count())
+                self.label.setText('Total ' + skin_count + ' Skins')
+            f.close()
+            self.lbl_Version.setText('Version : ' + Version)
+            self.lbl_clientlocation.setText('Client Location : ' + client_location)
+            self.lbl_serverlocation.setText('Server Location : ' + server_location)
+            if server_location == 'error':
+                self.lbl_serverlocation.setText('')
+                self.btn_openus.setVisible(False)
+                self.btn_manuallist.setVisible(False)
+            self.lbl_DLserver.setText('DL Server : ' + DLServer)
 
     def on_item_clicked(self, item):
         self.btn_open_skin.setEnabled(True)
@@ -339,13 +352,13 @@ class WindowClass(QMainWindow, form_class) :
                 try:
                     image=Request(url, headers={'User-Agent': 'Mozilla/5.0'})
                 except urllib.error.HTTPError as e:
-                    print(e.__dict__)
+                    print(f'ERROR! : Download Tank IMG from {url}. Error code {e.__dict__}')
                     self.btn_download.setEnabled(False)
                     self.lbl_error.setText('Error!')
                     self.lbl_error_2.setText(str(e.reason))
                     self.lbl_img.setText('Error!')
                 except urllib.error.URLError as e:
-                    print(e.__dict__)
+                    print(f'ERROR! : Download Tank IMG from {url}. Error code {e.__dict__}')
                     self.btn_download.setEnabled(False)
                     self.lbl_error.setText('Error!')
                     self.lbl_error_2.setText(str(e.reason))
@@ -363,13 +376,13 @@ class WindowClass(QMainWindow, form_class) :
                 try:
                     image_flag = Request(url_flag, headers={'User-Agent': 'Mozilla/5.0'})
                 except urllib.error.HTTPError as e:
-                    print(e.__dict__)
+                    print(f'ERROR! : Download National Flag from {url_flag}. Error code {e.__dict__}')
                     self.btn_download.setEnabled(False)
                     self.lbl_error.setText('Error!')
                     self.lbl_error_2.setText(str(e.reason))
                     self.lbl_img.setText('Error!')
                 except urllib.error.URLError as e:
-                    print(e.__dict__)
+                    print(f'ERROR! : Download National Flag from {url_flag}. Error code {e.__dict__}')
                     self.btn_download.setEnabled(False)
                     self.lbl_error.setText('Error!')
                     self.lbl_error_2.setText(str(e.reason))
@@ -386,13 +399,13 @@ class WindowClass(QMainWindow, form_class) :
             try:
                     image=Request(url, headers={'User-Agent': 'Mozilla/5.0'})
             except urllib.error.HTTPError as e:
-                    print(e.__dict__)
+                    print(f'ERROR! : Download National Flag from {url}. Error code {e.__dict__}')
                     self.btn_download.setEnabled(False)
                     self.lbl_error.setText('Error!')
                     self.lbl_error_2.setText(str(e.reason))
                     self.lbl_img.setText('Error!')
             except urllib.error.URLError as e:
-                    print(e.__dict__)
+                    print(f'ERROR! : Download National Flag from {url}. Error code {e.__dict__}')
                     self.btn_download.setEnabled(False)
                     self.lbl_error.setText('Error!')
                     self.lbl_error_2.setText(str(e.reason))
@@ -450,10 +463,10 @@ class WindowClass(QMainWindow, form_class) :
             try:
                 urllib.request.urlretrieve(downloadURL, lawname + '.zip')
             except urllib.error.HTTPError as e:
-                print(e.__dict__)
+                print(f'ERROR! : Download Tank Skin zip from {downloadURL}. Error code {e.__dict__}')
                 self.btn_download.setEnabled(False)
             except urllib.error.URLError as e:
-                print(e.__dict__)
+                print(f'ERROR! : Download Tank Skin zip from {downloadURL}. Error code {e.__dict__}')
                 self.btn_download.setEnabled(False)
                 self.lbl_error.setText('Error!')
                 self.lbl_error_2.setText(str(e.reason))
@@ -492,7 +505,7 @@ class WindowClass(QMainWindow, form_class) :
             print(name)
             print(f)
             if server_location == 'error':
-                print('auto upload disabled')
+                print('Notice : zip auto upload disabled')
             else:
                 if os.path.exists(server_location + '/' + name + '.zip') == True:
                     print(f'Upload Error File Exists {name}')
